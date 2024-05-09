@@ -20,7 +20,7 @@ class AndroidLarge6 extends StatelessWidget {
                   width: 240.86,
                   height: 66.88,
                   child: Text(
-                    'Eίσοδος',
+                    'Είσοδος',
                     textAlign: TextAlign.left,
                     style: TextStyle(
                       color: Color(0xFF1E1E1E),
