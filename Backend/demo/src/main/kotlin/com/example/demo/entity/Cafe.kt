@@ -8,16 +8,17 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 
 @Entity
-@Table(name = "users")
-data class User(
+@Table(name = "cafe")
+data class Cofeshop(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
 
-    @Column(name = "username", nullable = false, unique = true)
-    var username: String,
+    @Column(name = "onoma", nullable = false, unique = true)
+    var onoma: String,
 
     @Column(name = "password", nullable = false)
     var password: String
-)
+    )
+

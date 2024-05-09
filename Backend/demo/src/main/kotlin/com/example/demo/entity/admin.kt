@@ -8,16 +8,14 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 
 @Entity
-@Table(name = "users")
-data class User(
+@Table(name = "admin")
+data class Admin(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
 
-    @Column(name = "username", nullable = false, unique = true)
-    var username: String,
+    @Column(name = "OnomaAdmin", nullable = false, unique = true)
+    var OnomaAdmin: String,
 
-    @Column(name = "password", nullable = false)
-    var password: String
-)
+    )
