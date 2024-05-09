@@ -125,14 +125,14 @@ class AndroidLarge4 extends StatelessWidget {
                         height: 48,
                         clipBehavior: Clip.antiAlias,
                         decoration: ShapeDecoration(
-                          color: Color(0xFF1E1E1E),
+                          color: Color(0xFFE4572E),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(100),
                           ),
                         ),
                         child: Center(
                           child: Text(
-                            'Εγγραφή',
+                            'Είσοδος',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14,
@@ -196,14 +196,14 @@ class AndroidLarge4 extends StatelessWidget {
                       height: 48,
                       clipBehavior: Clip.antiAlias,
                       decoration: ShapeDecoration(
-                        color: Color(0xFFE4572E),
+                        color: Color(0xFF1E1E1E),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(100),
                         ),
                       ),
                       child: Center(
                         child: Text(
-                          'Είσοδος',
+                          'Εγγραφή',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 14,
