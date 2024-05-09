@@ -36,6 +36,7 @@ flutter:
     - assets/images/key.png
     - assets/images/key2.png
     - assets/images/tButton.png
+    - assets/images/bulbEUR.png
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
