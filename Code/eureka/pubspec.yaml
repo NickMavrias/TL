@@ -32,6 +32,10 @@ flutter:
     - assets/images/logo_telikoCOLOURED-02.svg
     - assets/images/logo_telikoCOLOURED-02ORANGE-01.svg
     - assets/images/backmodel.png
+    - assets/images/gButton.png
+    - assets/images/key.png
+    - assets/images/key2.png
+    - assets/images/tButton.png
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

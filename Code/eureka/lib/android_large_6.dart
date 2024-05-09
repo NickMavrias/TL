@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 
 class AndroidLarge6 extends StatelessWidget {
   @override
@@ -303,13 +305,14 @@ class AndroidLarge6 extends StatelessWidget {
                 ),
               ),
               Positioned(
-                left: 8.66,
-                top: 1.29,
-                child: Container(
-                  width: 165,
-                  height: 154.08,
-                  child: FlutterLogo(size: 150),
-                ),
+                    top: 0,
+                    left: -160,
+                    right: 0,
+                    child: SvgPicture.asset(
+                      'assets/images/logo_telikoCOLOURED-02.svg',
+                      width: 250,
+                      height: 200,
+                    ),
               ),
             ],
           ),
