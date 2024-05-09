@@ -38,6 +38,3 @@ tasks.withType<KotlinCompile> {
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
-
-// https://mvnrepository.com/artifact/org.springframework/spring-core
-implementation("org.springframework.boot:spring-boot:3.2.5")
