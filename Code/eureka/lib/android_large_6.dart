@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:your_app_name/android_large_7.dart';
 
-
 class AndroidLarge6 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -21,7 +20,7 @@ class AndroidLarge6 extends StatelessWidget {
                   width: 240.86,
                   height: 66.88,
                   child: Text(
-                    'Είσοδος',
+                    'ίσοδος',
                     textAlign: TextAlign.left,
                     style: TextStyle(
                       color: Color(0xFF1E1E1E),
@@ -193,7 +192,8 @@ class AndroidLarge6 extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => AndroidLarge7()),
+                        MaterialPageRoute(
+                            builder: (context) => AndroidLarge7()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -309,14 +309,14 @@ class AndroidLarge6 extends StatelessWidget {
                 ),
               ),
               Positioned(
-                    top: 0,
-                    left: -160,
-                    right: 0,
-                    child: SvgPicture.asset(
-                      'assets/images/logo_telikoCOLOURED-02.svg',
-                      width: 250,
-                      height: 200,
-                    ),
+                top: 0,
+                left: -160,
+                right: 0,
+                child: SvgPicture.asset(
+                  'assets/images/logo_telikoCOLOURED-02.svg',
+                  width: 250,
+                  height: 200,
+                ),
               ),
             ],
           ),
