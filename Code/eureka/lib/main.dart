@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:your_app_name/android_large_8.dart';
 import 'android_large_6.dart'; // Make sure this path matches the location of your AndroidLarge6 file
-import 'android_large_8.dart';
 
 void main() {
   runApp(MyApp());
@@ -193,40 +191,32 @@ class AndroidLarge4 extends StatelessWidget {
                   Positioned(
                     left: 74.75,
                     top: 623,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => AndroidLarge8()),
-                        );
-                      },
-                      child: Container(
-                        width: 211,
-                        height: 48,
-                        clipBehavior: Clip.antiAlias,
-                        decoration: ShapeDecoration(
-                          color: Color(0xFF1E1E1E),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(100),
-                          ),
+                    child: Container(
+                      width: 211,
+                      height: 48,
+                      clipBehavior: Clip.antiAlias,
+                      decoration: ShapeDecoration(
+                        color: Color(0xFF1E1E1E),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(100),
                         ),
-                        child: Center(
-                          child: Text(
-                            'Εγγραφή',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontFamily: 'Roboto',
-                              fontWeight: FontWeight.w500,
-                              height: 0.10,
-                              letterSpacing: 0.10,
-                            ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Εγγραφή',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontFamily: 'Roboto',
+                            fontWeight: FontWeight.w500,
+                            height: 0.10,
+                            letterSpacing: 0.10,
                           ),
                         ),
                       ),
                     ),
                   ),
-                 Positioned(
+                  Positioned(
                     left: 62.02,
                     top: 765,
                     child: Text(
