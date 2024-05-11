@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:your_app_name/android_large_9.dart';
+
 
 class AndroidLarge8 extends StatelessWidget {
   @override
@@ -216,7 +218,11 @@ class AndroidLarge8 extends StatelessWidget {
                     height: 51,
                     child: ElevatedButton(
                       onPressed: () {
-                        // Trigger functionality for form submission or navigation
+                        // Navigate to AndroidLarge9 when the button is pressed
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => AndroidLarge9()),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFFE4572E),
