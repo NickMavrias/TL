@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:your_app_name/android_large_8.dart';
 import 'android_large_6.dart'; // Make sure this path matches the location of your AndroidLarge6 file
 import 'android_large_8.dart';
 
