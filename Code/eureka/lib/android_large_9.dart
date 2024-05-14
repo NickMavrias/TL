@@ -1,6 +1,9 @@
+// ignore_for_file: unused_import
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:async';
+import 'package:your_app_name/android_large_10.dart';
 
 class AndroidLarge9 extends StatelessWidget {
   @override
@@ -164,6 +167,11 @@ class AndroidLarge9 extends StatelessWidget {
                 Center(
                   child: ElevatedButton(
                     onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => AndroidLarge10()),
+                        );
+
                       // Navigate to the next screen or submit form data
                     },
                     style: ElevatedButton.styleFrom(
