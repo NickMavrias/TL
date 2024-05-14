@@ -52,12 +52,12 @@ class UserServiceImpl constructor(private val userRepository: UsersRepository) :
         userRepository.deleteById(userId)
     }
 
-    override fun loginUser(username: String, password: String): String {
+    override fun loginUser(username: String, password: String): Int {
         val user: User? = userRepository.findByUsernameAndPassword(username, password)
         return if (user != null) {
-            "yes"
+            1
         } else {
-            "no"
+            0
         } // travaei apo thn vash pinaka eggrafhs
     }
 

@@ -13,7 +13,7 @@ interface UserService {
 
     fun deleteUser(userId: Long)
 
-    fun loginUser(username: String, password: String): String
+    fun loginUser(username: String, password: String): Int
 
 
 }

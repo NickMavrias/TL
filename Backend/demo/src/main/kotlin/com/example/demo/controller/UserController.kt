@@ -46,12 +46,12 @@ class UserController(private val userService: UserService) {
 
     // Build Login REST API
     @PostMapping("/login")
-    fun loginUser(@RequestBody credentials: Map<String, String>): String {
+    fun loginUser(@RequestBody credentials: Map<String, String>): Int {
         val username = credentials["username"]
         val password = credentials["password"]
         if (username != null && password != null) {
             return userService.loginUser(username, password)
         }
-        return "no"
+        return 0
     }
 }
