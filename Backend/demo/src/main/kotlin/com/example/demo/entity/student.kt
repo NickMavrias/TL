@@ -67,10 +67,6 @@ data class Student(
     @Column(name = "sms_notification", nullable = false)
     var smsNotification: Boolean,
 
-    @Lob // Annotation for Large Object
-    @Column(name = "photo", nullable = true)
-    var photo: ByteArray?, // Use ByteArray type to store binary data of the photo
-
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     var user: User,

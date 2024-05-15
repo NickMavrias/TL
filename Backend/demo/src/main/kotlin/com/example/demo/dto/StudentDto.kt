@@ -4,7 +4,6 @@ import com.example.demo.entity.Gender
 import com.example.demo.entity.Interests
 import java.time.LocalDate
 
-
 data class StudentDto(
     val email: String,
     val phone: String,
@@ -20,5 +19,6 @@ data class StudentDto(
     val emailNotification: Boolean,
     val pushNotification: Boolean,
     val smsNotification: Boolean,
-    val user: UserDto
+    val user: UserDto,
+    val links: List<LinkDto>  // Add this line to include links
 )

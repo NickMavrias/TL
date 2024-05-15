@@ -1,6 +1,6 @@
 package com.example.demo.dto
 
-data class ImageDto (
+data class LinkDto (
 
         val id: Long?,
         val url: String)

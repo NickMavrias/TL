@@ -2,5 +2,7 @@ package com.example.demo.repository
 
 import com.example.demo.entity.Link
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
 
-interface LinkRepository : JpaRepository<Link, Long>
+@Repository
+interface LinksRepository : JpaRepository<Link, Long>
