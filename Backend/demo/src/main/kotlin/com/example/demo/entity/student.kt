@@ -73,6 +73,9 @@ data class Student(
 
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    var user: User
+    var user: User,
+
+    @OneToMany(mappedBy = "student", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var links: MutableList<Link> = mutableListOf() // Define a list of links associated with the student
 
 )
