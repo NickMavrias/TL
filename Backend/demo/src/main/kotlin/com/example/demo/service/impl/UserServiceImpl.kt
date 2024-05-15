@@ -55,7 +55,7 @@ class UserServiceImpl constructor(private val userRepository: UsersRepository,
     override fun loginUser(username: String, password: String): String {
         val user: User? = userRepository.findByUsernameAndPassword(username, password)
         return if (user != null) {
-            "yes"
+            "success"
         } else {
             "no"
         } // travaei apo thn vash pinaka eggrafhs

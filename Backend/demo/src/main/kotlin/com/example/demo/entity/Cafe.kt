@@ -20,5 +20,5 @@ data class Cofeshop(
 
     @Column(name = "password", nullable = false)
     var password: String
-    )
+)
 

@@ -2,13 +2,16 @@ package com.example.demo.controller
 
 import com.example.demo.dto.UserDto
 import com.example.demo.service.UserService
+import jakarta.servlet.http.HttpSession
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/users")
-class UserController(private val userService: UserService) {
+class UserController(private val userService: UserService,
+                     private val httpSession: HttpSession
+) {
 
     // Build Add User REST API
     @PostMapping
@@ -46,12 +49,18 @@ class UserController(private val userService: UserService) {
 
     // Build Login REST API
     @PostMapping("/login")
-    fun loginUser(@RequestBody credentials: Map<String, String>): String {
+    fun loginUser(@RequestBody credentials: Map<String, String>): ResponseEntity<String> {
         val username = credentials["username"]
         val password = credentials["password"]
         if (username != null && password != null) {
-            return userService.loginUser(username, password)
+            val loginResult = userService.loginUser(username, password)
+            return if (loginResult == "success") {
+                httpSession.setAttribute("username", username)
+                ResponseEntity.ok("Login successful")
+            } else {
+                ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials")
+            }
         }
-        return "no"
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username and password required")
     }
 }
