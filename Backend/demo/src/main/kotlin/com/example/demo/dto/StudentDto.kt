@@ -4,6 +4,7 @@ import com.example.demo.entity.Gender
 import com.example.demo.entity.Interests
 import java.time.LocalDate
 
+
 data class StudentDto(
     val email: String,
     val phone: String,
