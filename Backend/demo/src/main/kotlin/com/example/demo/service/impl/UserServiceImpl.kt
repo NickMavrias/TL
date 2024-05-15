@@ -9,26 +9,26 @@ import net.javaguides.ems.exception.ResourceNotFoundException
 import org.springframework.stereotype.Service
 
 @Service
-class UserServiceImpl constructor(private val userRepository: UsersRepository) : UserService {
+class UserServiceImpl constructor(private val userRepository: UsersRepository,
+                                  private val userMapper: UserMapper) : UserService {
 
-    private val userMapper = UserMapper() // Create an instance of UserMapper
 
     override fun createUser(userDto: UserDto): UserDto {
-        val user = userMapper.mapToUser(userDto) // Call instance method on userMapper
+        val user = userMapper.toEntity(userDto) // Call instance method on userMapper
         val savedUser = userRepository.save(user)
-        return userMapper.mapToUserDto(savedUser) // Call instance method on userMapper
+        return userMapper.toDto(savedUser) // Call instance method on userMapper
     }
 
     override fun getUserById(userId: Long): UserDto {
         val user = userRepository.findById(userId)
             .orElseThrow { ResourceNotFoundException("User does not exist: $userId") }
 
-        return userMapper.mapToUserDto(user) // Call instance method on userMapper
+        return userMapper.toDto(user) // Call instance method on userMapper
     }
 
     override fun getAllUsers(): List<UserDto> {
         val users: List<User> = userRepository.findAll()
-        return users.map { user -> userMapper.mapToUserDto(user) }
+        return users.map { user -> userMapper.toDto(user) }
     }
 
     override fun updateUser(userId: Long, updatedUser: UserDto): UserDto {
@@ -42,7 +42,7 @@ class UserServiceImpl constructor(private val userRepository: UsersRepository) :
         // Save updated user
         val updatedUserObj = userRepository.save(user)
 
-        return userMapper.mapToUserDto(updatedUserObj)
+        return userMapper.toDto(updatedUserObj)
     }
 
     override fun deleteUser(userId: Long) {
