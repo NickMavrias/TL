@@ -1,8 +1,68 @@
+// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, prefer_const_literals_to_create_immutables
+
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:your_app_name/android_large_7.dart';
+import 'package:http/http.dart' as http;
+import 'package:your_app_name/androidlarge11.dart';
+
+// Define controller objects for the text fields
+final TextEditingController usernameController = TextEditingController();
+final TextEditingController passwordController = TextEditingController();
 
 class AndroidLarge6 extends StatelessWidget {
+  // Function to handle login
+  Future<void> _login(
+      BuildContext context, String username, String password) async {
+    // Trim whitespace from username and password
+    username = username.trim();
+    password = password.trim();
+
+    // Check if username or password is empty after trimming whitespace
+    if (username.isEmpty || password.isEmpty) {
+      // Show a snackbar or an alert dialog to notify the user
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Please enter both username and password.'),
+        duration: Duration(seconds: 2),
+      ));
+      return; // Return without proceeding further
+    }
+
+    final url = Uri.parse(
+        'http://192.168.2.8:8080/api/users/login'); // vazoyme tin ip-v4 mas
+    try {
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'username': username,
+          'password': password,
+        }),
+      );
+
+      if (response.body == "1") {
+        // If login successful, navigate to next screen
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AndroidLarge7()),
+        );
+      } else {
+        // Handle error cases here
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('The username or password is wrong!'),
+          duration: Duration(seconds: 2),
+        ));
+        return;
+      }
+    } catch (e) {
+      print('Exception caught: $e');
+      // Handle exceptions here
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +80,7 @@ class AndroidLarge6 extends StatelessWidget {
                   width: 240.86,
                   height: 66.88,
                   child: Text(
-                    'Είσοδος',
+                    'Eίσοδος',
                     textAlign: TextAlign.left,
                     style: TextStyle(
                       color: Color(0xFF1E1E1E),
@@ -142,7 +202,10 @@ class AndroidLarge6 extends StatelessWidget {
                         ),
                       ),
                       Expanded(
-                        child: TextField(),
+                        child: TextField(
+                          controller:
+                              usernameController, // Assign the controller
+                        ),
                       ),
                     ],
                   ),
@@ -176,7 +239,10 @@ class AndroidLarge6 extends StatelessWidget {
                         ),
                       ),
                       Expanded(
-                        child: TextField(),
+                        child: TextField(
+                          controller:
+                              passwordController, // Assign the controller
+                        ),
                       ),
                     ],
                   ),
@@ -190,10 +256,11 @@ class AndroidLarge6 extends StatelessWidget {
                   height: 51,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
+                      // Call _login function with username and password from controllers
+                      _login(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => AndroidLarge7()),
+                        usernameController.text,
+                        passwordController.text,
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -221,7 +288,12 @@ class AndroidLarge6 extends StatelessWidget {
                   width: 312,
                   height: 51,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => AndroidLarge11()),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFFE4572E),
                       shape: RoundedRectangleBorder(
