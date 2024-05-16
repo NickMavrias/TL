@@ -13,7 +13,6 @@ class UserController(private val userService: UserService,
                      private val httpSession: HttpSession
 ) {
 
-    // Build Add User REST API
     @PostMapping
     fun createUser(@RequestBody userDto: UserDto): ResponseEntity<UserDto> {
         val savedUser = userService.createUser(userDto)
@@ -26,11 +25,19 @@ class UserController(private val userService: UserService,
         return ResponseEntity.ok(userDto)
     }
 
-    // Build Get All Users REST API
     @GetMapping
     fun getAllUsers(): ResponseEntity<List<UserDto>> {
         val users: List<UserDto> = userService.getAllUsers()
         return ResponseEntity.ok(users)
+    }
+
+    @GetMapping("/check-unique")
+    fun checkUsernameOrEmailUnique(
+        @RequestParam("username") username: String,
+        @RequestParam("email") email: String
+    ): ResponseEntity<String> {
+        val responseMessage = userService.checkUsernameOrEmailUnique(username, email)
+        return ResponseEntity.ok(responseMessage)
     }
 
     @PutMapping("/{id}")
@@ -40,27 +47,25 @@ class UserController(private val userService: UserService,
         return ResponseEntity.ok(userDto)
     }
 
-    // Build Delete User REST API
     @DeleteMapping("{id}")
     fun deleteUser(@PathVariable("id") userId: Long): ResponseEntity<String> {
         userService.deleteUser(userId)
         return ResponseEntity.ok("User deleted successfully!")
     }
 
-    // Build Login REST API
     @PostMapping("/login")
     fun loginUser(@RequestBody credentials: Map<String, String>): ResponseEntity<String> {
-        val username = credentials["username"]
+        val identifier = credentials["identifier"]
         val password = credentials["password"]
-        if (username != null && password != null) {
-            val loginResult = userService.loginUser(username, password)
-            return if (loginResult == "success") {
-                httpSession.setAttribute("username", username)
+        return if (identifier != null && password != null) {
+            val loginResult = userService.loginUser(identifier, password)
+            if (loginResult) {
                 ResponseEntity.ok("Login successful")
             } else {
                 ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials")
             }
+        } else {
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Identifier and password required")
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username and password required")
     }
 }

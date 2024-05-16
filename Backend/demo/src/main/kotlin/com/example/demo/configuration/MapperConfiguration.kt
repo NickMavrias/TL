@@ -1,5 +1,6 @@
 package com.example.demo.configuration
 
+import com.example.demo.mapper.LinkMapper
 import com.example.demo.mapper.StudentMapper
 import com.example.demo.mapper.UserMapper
 import org.mapstruct.Mapper
@@ -18,5 +19,10 @@ class MapperConfiguration {
     @Bean
     fun studentMapper(): StudentMapper {
         return Mappers.getMapper(StudentMapper::class.java)
+    }
+
+    @Bean
+    fun linkMapper(): LinkMapper {
+        return Mappers.getMapper(LinkMapper::class.java)
     }
 }
