@@ -4,6 +4,7 @@ plugins {
 	id("org.springframework.boot") version "3.2.5"
 	id("io.spring.dependency-management") version "1.1.4"
 	kotlin("jvm") version "1.9.23"
+	kotlin("kapt") version "1.9.23"
 	kotlin("plugin.spring") version "1.9.23"
 	kotlin("plugin.jpa") version "1.9.23"
 }
@@ -24,6 +25,11 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
+	implementation("org.mapstruct:mapstruct:1.4.2.Final")
+	kapt("org.mapstruct:mapstruct-processor:1.4.2.Final") // Moved kapt dependency here
+	implementation("org.springframework.session:spring-session-core")
+	implementation("javax.servlet:javax.servlet-api:4.0.1")
+	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	runtimeOnly("org.postgresql:postgresql")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }

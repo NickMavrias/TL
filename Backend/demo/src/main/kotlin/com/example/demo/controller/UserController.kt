@@ -2,15 +2,17 @@ package com.example.demo.controller
 
 import com.example.demo.dto.UserDto
 import com.example.demo.service.UserService
+import jakarta.servlet.http.HttpSession
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/users")
-class UserController(private val userService: UserService) {
+class UserController(private val userService: UserService,
+                     private val httpSession: HttpSession
+) {
 
-    // Build Add User REST API
     @PostMapping
     fun createUser(@RequestBody userDto: UserDto): ResponseEntity<UserDto> {
         val savedUser = userService.createUser(userDto)
@@ -23,11 +25,19 @@ class UserController(private val userService: UserService) {
         return ResponseEntity.ok(userDto)
     }
 
-    // Build Get All Users REST API
     @GetMapping
     fun getAllUsers(): ResponseEntity<List<UserDto>> {
         val users: List<UserDto> = userService.getAllUsers()
         return ResponseEntity.ok(users)
+    }
+
+    @GetMapping("/check-unique")
+    fun checkUsernameOrEmailUnique(
+        @RequestParam("username") username: String,
+        @RequestParam("email") email: String
+    ): ResponseEntity<String> {
+        val responseMessage = userService.checkUsernameOrEmailUnique(username, email)
+        return ResponseEntity.ok(responseMessage)
     }
 
     @PutMapping("/{id}")
@@ -37,21 +47,25 @@ class UserController(private val userService: UserService) {
         return ResponseEntity.ok(userDto)
     }
 
-    // Build Delete User REST API
     @DeleteMapping("{id}")
     fun deleteUser(@PathVariable("id") userId: Long): ResponseEntity<String> {
         userService.deleteUser(userId)
         return ResponseEntity.ok("User deleted successfully!")
     }
 
-    // Build Login REST API
     @PostMapping("/login")
-    fun loginUser(@RequestBody credentials: Map<String, String>): String {
-        val username = credentials["username"]
+    fun loginUser(@RequestBody credentials: Map<String, String>): ResponseEntity<String> {
+        val identifier = credentials["identifier"]
         val password = credentials["password"]
-        if (username != null && password != null) {
-            return userService.loginUser(username, password)
+        return if (identifier != null && password != null) {
+            val loginResult = userService.loginUser(identifier, password)
+            if (loginResult) {
+                ResponseEntity.ok("Login successful")
+            } else {
+                ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials")
+            }
+        } else {
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Identifier and password required")
         }
-        return "no"
     }
 }
