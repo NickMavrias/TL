@@ -14,6 +14,8 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_svg: ^1.1.6  # Check for the latest version on pub.dev
+  http: ^1.2.1
+  swipe_cards: ^2.0.0+1
 
 dev_dependencies:
   flutter_test:
@@ -37,6 +39,15 @@ flutter:
     - assets/images/key2.png
     - assets/images/tButton.png
     - assets/images/bulbEUR.png
-
+    - assets/images/user1.png
+    - assets/images/user2.png
+    - assets/images/iconM1.png
+    - assets/images/iconM2.png
+    - assets/images/iconM3.png
+    - assets/images/iconM4.png
+    - assets/images/iconM5.png
+    - assets/images/lik.png
+    - assets/images/slik.png
+    - assets/images/dislik.png
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
