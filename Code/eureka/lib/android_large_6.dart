@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:your_app_name/android_large_7.dart';
 import 'package:http/http.dart' as http;
+import 'package:your_app_name/androidlarge11.dart';
 
 // Define controller objects for the text fields
 final TextEditingController usernameController = TextEditingController();
@@ -287,7 +288,12 @@ class AndroidLarge6 extends StatelessWidget {
                   width: 312,
                   height: 51,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => AndroidLarge11()),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFFE4572E),
                       shape: RoundedRectangleBorder(
