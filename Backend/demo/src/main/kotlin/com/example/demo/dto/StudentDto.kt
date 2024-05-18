@@ -20,5 +20,5 @@ data class StudentDto(
     val pushNotification: Boolean,
     val smsNotification: Boolean,
     val user: UserDto,
-    val links: List<LinkDto>  // Add this line to include links
+    val images: List<ImageDto>  // Add this line to include links
 )
