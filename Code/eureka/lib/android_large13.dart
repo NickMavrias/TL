@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'androidlarge11.dart';
+import 'android_large14.dart';
 
 class AndroidLarge13 extends StatefulWidget {
   @override
@@ -64,6 +65,11 @@ class _AndroidLarge13State extends State<AndroidLarge13> {
           if (index == 0) { // If first icon is tapped
             Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => AndroidLarge11()),
+            );
+          }
+          else if (index == 2){
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => AndroidLarge14()),
             );
           }
         },

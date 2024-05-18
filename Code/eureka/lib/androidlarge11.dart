@@ -20,9 +20,9 @@ class _AndroidLarge11State extends State<AndroidLarge11> {
       SwipeItem(
         content: Content(
           imagePath: 'assets/images/user1.png',
-          name: 'Nick',
+          name: 'Νίκος',
           age: 22,
-          location: 'Patra',
+          location: 'Πάτρα',
           distance: 1.0,
         ),
         likeAction: () => print("Liked N"),
@@ -32,15 +32,28 @@ class _AndroidLarge11State extends State<AndroidLarge11> {
       SwipeItem(
         content: Content(
           imagePath: 'assets/images/user2.png',
-          name: 'Georgios',
+          name: 'Γιώργος',
           age: 22,
-          location: 'Patra',
+          location: 'Πάτρα',
           distance: 3.2,
         ),
         likeAction: () => print("Liked G"),
         nopeAction: () => print("Disliked G"),
         superlikeAction: () => print("Superliked G"),
       ),
+      SwipeItem(
+        content: Content(
+          imagePath: 'assets/images/user3.png',
+          name: 'Γιώργος',
+          age: 22,
+          location: 'Φλώρινα',
+          distance: 0.2,
+        ),
+        likeAction: () => print("Liked G"),
+        nopeAction: () => print("Disliked G"),
+        superlikeAction: () => print("Superliked G"),
+      ),
+      
     ];
     matchEngine = MatchEngine(swipeItems: swipeItems);
   }
@@ -157,8 +170,8 @@ class UserCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('${content.name}, ${content.age}', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white)),
-                    Text('Lives in ${content.location}', style: TextStyle(color: Colors.white, fontSize: 16)),
-                    Text('${content.distance} km away', style: TextStyle(color: Colors.white, fontSize: 16)),
+                    Text('Ζει στην ${content.location}', style: TextStyle(color: Colors.white, fontSize: 16)),
+                    Text('${content.distance} km μακριά', style: TextStyle(color: Colors.white, fontSize: 16)),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
