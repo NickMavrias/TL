@@ -72,6 +72,6 @@ data class Student(
     var user: User,
 
     @OneToMany(mappedBy = "student", cascade = [CascadeType.ALL], orphanRemoval = true)
-    var links: MutableList<Link> = mutableListOf() // Define a list of links associated with the student
+    var images: MutableList<Image> = mutableListOf() // Define a list of links associated with the student
 
 )

@@ -2,12 +2,12 @@ package com.example.demo.service.impl
 
 import org.springframework.stereotype.Service
 import com.example.demo.dto.StudentDto
+import com.example.demo.mapper.ImageMapper
 import com.example.demo.mapper.StudentMapper
-import com.example.demo.mapper.LinkMapper
 import com.example.demo.mapper.UserMapper
+import com.example.demo.repository.ImagesRepository
 import com.example.demo.repository.StudentsRepository
 import com.example.demo.repository.UsersRepository
-import com.example.demo.repository.LinksRepository
 import com.example.demo.service.StudentService
 import org.springframework.transaction.annotation.Transactional
 
@@ -15,10 +15,10 @@ import org.springframework.transaction.annotation.Transactional
 class StudentServiceImpl(
     private val studentRepository: StudentsRepository,
     private val userRepository: UsersRepository,
-    private val linksRepository: LinksRepository,
+    private val imagesRepository: ImagesRepository,
     private val userMapper: UserMapper,
     private val studentMapper: StudentMapper,
-    private val linkMapper: LinkMapper
+    private val imageMapper: ImageMapper
 ) : StudentService {
 
     @Transactional
@@ -39,10 +39,10 @@ class StudentServiceImpl(
         val createdStudent = studentRepository.save(studentEntity)
 
         // Save the links associated with the student
-        studentDto.links.forEach { linkDto ->
-            val linkEntity = linkMapper.toEntity(linkDto)
-            linkEntity.student = createdStudent // Set the student property
-            linksRepository.save(linkEntity)
+        studentDto.images.forEach { imageDto ->
+            val imageEntity = imageMapper.toEntity(imageDto)
+            imageEntity.student = createdStudent // Set the student property
+            imagesRepository.save(imageEntity)
         }
 
         // Map and return the created student Dto
