@@ -50,7 +50,7 @@ class AndroidLarge10 extends StatelessWidget {
                 ),
                 const SizedBox(height: 5),
                 Text(
-                  '1/3',
+                  '1/2',
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
