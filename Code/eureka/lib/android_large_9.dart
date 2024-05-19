@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart'; // Add this import for date formatting
 import 'package:your_app_name/android_large_10.dart';
 
 class AndroidLarge9 extends StatefulWidget {
@@ -13,7 +14,7 @@ class _AndroidLarge9State extends State<AndroidLarge9> {
   bool _notARobotChecked = false;
   TextEditingController _nameController = TextEditingController();
   TextEditingController _dateController = TextEditingController();
-  TextEditingController _genderController = TextEditingController();
+  String? _selectedGender;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -37,8 +38,7 @@ class _AndroidLarge9State extends State<AndroidLarge9> {
     );
     if (pickedDate != null) {
       setState(() {
-        _dateController.text =
-            "${pickedDate.toLocal()}".split(' ')[0]; // Format date as needed
+        _dateController.text = DateFormat('dd/MM/yyyy').format(pickedDate);
       });
     }
   }
@@ -46,10 +46,50 @@ class _AndroidLarge9State extends State<AndroidLarge9> {
   void _showWarning(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
+        content: Text(
+          message,
+          style: TextStyle(
+              color: Color(0xFF79747E)), // Text color matching robot check
+        ),
+        backgroundColor:
+            Color(0xFFFAFAFA), // Background color matching robot check
+        behavior: SnackBarBehavior.floating,
       ),
     );
+  }
+
+  void _validateAndProceed() {
+    if (_nameController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('You must enter your name!'),
+        duration: Duration(seconds: 2),
+      ));
+    } else if (_dateController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('You must enter birth date!'),
+        duration: Duration(seconds: 2),
+      ));
+    } else if (_selectedGender == null) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('You must select your gender!'),
+        duration: Duration(seconds: 2),
+      ));
+    } else if (!_termsAccepted) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('You must accept the Terms of Use and Privacy Policy!'),
+        duration: Duration(seconds: 2),
+      ));
+    } else if (!_notARobotChecked) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('You must confirm that you are not a robot!'),
+        duration: Duration(seconds: 2),
+      ));
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => AndroidLarge10()),
+      );
+    }
   }
 
   @override
@@ -120,8 +160,19 @@ class _AndroidLarge9State extends State<AndroidLarge9> {
                   ),
                 ),
                 SizedBox(height: 20),
-                TextField(
-                  controller: _genderController,
+                DropdownButtonFormField<String>(
+                  value: _selectedGender,
+                  items: ['MALE', 'FEMALE', 'OTHER']
+                      .map((gender) => DropdownMenuItem(
+                            value: gender,
+                            child: Text(gender),
+                          ))
+                      .toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedGender = value;
+                    });
+                  },
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(4),
@@ -238,27 +289,7 @@ class _AndroidLarge9State extends State<AndroidLarge9> {
                 SizedBox(height: 10), // Reduced space before the final button
                 Center(
                   child: ElevatedButton(
-                    onPressed: () {
-                      if (!_termsAccepted) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(
-                              'You must accept the Terms of Use and Privacy Policy!'),
-                          duration: Duration(seconds: 2),
-                        ));
-                      } else if (!_notARobotChecked) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(
-                              'You must confirm that you are not a robot!'),
-                          duration: Duration(seconds: 2),
-                        ));
-                      } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AndroidLarge10()),
-                        );
-                      }
-                    },
+                    onPressed: _validateAndProceed,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFFE4572E),
                       shape: RoundedRectangleBorder(
