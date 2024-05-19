@@ -7,7 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:your_app_name/android_large_7.dart';
 import 'package:http/http.dart' as http;
 import 'package:your_app_name/androidlarge11.dart';
-
+import 'package:your_app_name/android_large_8.dart';
 // Define controller objects for the text fields
 final TextEditingController usernameController = TextEditingController();
 final TextEditingController passwordController = TextEditingController();
@@ -137,19 +137,28 @@ class AndroidLarge6 extends StatelessWidget {
               Positioned(
                 left: 184.99,
                 top: 757.27,
-                child: SizedBox(
-                  width: 99.94,
-                  height: 23.80,
-                  child: Text(
-                    'Εγγραφείτε τώρα',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Color(0xFFE4572E),
-                      fontSize: 12,
-                      fontFamily: 'Roboto',
-                      fontWeight: FontWeight.w600,
-                      height: 1.2,
-                      letterSpacing: 0.10,
+                child: GestureDetector(
+                  onTap: () {
+                    // Navigate to the screen specified by android_large_8.dart
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AndroidLarge8()),
+                    );
+                  },
+                  child: SizedBox(
+                    width: 99.94,
+                    height: 23.80,
+                    child: Text(
+                      'Εγγραφείτε τώρα',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Color(0xFFE4572E),
+                        fontSize: 12,
+                        fontFamily: 'Roboto',
+                        fontWeight: FontWeight.w600,
+                        height: 1.2,
+                        letterSpacing: 0.10,
+                      ),
                     ),
                   ),
                 ),

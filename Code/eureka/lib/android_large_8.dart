@@ -1,3 +1,4 @@
+//register
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
 
 import 'package:flutter/material.dart';
@@ -5,7 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:your_app_name/android_large_9.dart';
-
+import 'package:your_app_name/android_large_6.dart';
 class AndroidLarge8 extends StatefulWidget {
   @override
   _AndroidLarge8State createState() => _AndroidLarge8State();
@@ -155,6 +156,14 @@ class _AndroidLarge8State extends State<AndroidLarge8> {
                 Positioned(
                   left: 184.99,
                   top: 757.27,
+                  child: GestureDetector(
+                  onTap: () {
+                    // Navigate to the screen specified by android_large_8.dart
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AndroidLarge6()),
+                    );
+                  },
                   child: SizedBox(
                     width: 99.94,
                     height: 23.80,
@@ -172,6 +181,7 @@ class _AndroidLarge8State extends State<AndroidLarge8> {
                     ),
                   ),
                 ),
+              ),
                 Positioned(
                   left: 24.23,
                   top: 259,
