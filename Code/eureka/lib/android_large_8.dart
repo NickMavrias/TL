@@ -1,12 +1,106 @@
-// ignore_for_file: unused_import
+// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:your_app_name/android_large_9.dart';
+import 'package:http/http.dart' as http;
 import 'dart:async';
+import 'package:your_app_name/android_large_9.dart';
 
+class AndroidLarge8 extends StatefulWidget {
+  @override
+  _AndroidLarge8State createState() => _AndroidLarge8State();
+}
 
-class AndroidLarge8 extends StatelessWidget {
+class _AndroidLarge8State extends State<AndroidLarge8> {
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+
+  Future<void> _validateAndProceed() async {
+    final username = _usernameController.text;
+    final email = _emailController.text;
+    final phone = _phoneController.text;
+    final password = _passwordController.text;
+    final confirmPassword = _confirmPasswordController.text;
+
+    final emailRegExp = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
+    final phoneRegExp = RegExp(r'^69\d{8}$');
+
+    if (!emailRegExp.hasMatch(email)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please enter a valid email address!'),
+        ),
+      );
+      return;
+    }
+
+    if (!phoneRegExp.hasMatch(phone)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Phone number must be 10 digits and start with 69!'),
+        ),
+      );
+      return;
+    }
+
+    if (password != confirmPassword) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Passwords must be the same!'),
+        ),
+      );
+      return;
+    }
+
+    try {
+      final response = await http.get(
+        Uri.parse(
+            'http://192.168.2.10:8080/api/users/check-unique?username=$username&email=$email'),
+      );
+
+      if (response.body == "Both username and email are unique") {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AndroidLarge9()),
+        );
+      } else if (response.body == "Username already exists") {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Username already exists!'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Email already exists!'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: $e'),
+        ),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,7 +108,6 @@ class AndroidLarge8 extends StatelessWidget {
         child: Center(
           child: Container(
             width: 360,
-            // Flexible height to accommodate all children
             height: 1200,
             decoration: BoxDecoration(color: Colors.white),
             child: Stack(
@@ -90,9 +183,11 @@ class AndroidLarge8 extends StatelessWidget {
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: TextField(
+                      controller: _usernameController,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        contentPadding: EdgeInsets.only(left: 16, top: 16, bottom: 16),
+                        contentPadding:
+                            EdgeInsets.only(left: 16, top: 16, bottom: 16),
                         hintText: 'Όνομα χρήστη',
                         hintStyle: TextStyle(
                           color: Color(0xFF1E1E1E),
@@ -116,9 +211,11 @@ class AndroidLarge8 extends StatelessWidget {
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: TextField(
+                      controller: _emailController,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        contentPadding: EdgeInsets.only(left: 16, top: 16, bottom: 16),
+                        contentPadding:
+                            EdgeInsets.only(left: 16, top: 16, bottom: 16),
                         hintText: 'E-mail',
                         hintStyle: TextStyle(
                           color: Color(0xFF1E1E1E),
@@ -143,9 +240,11 @@ class AndroidLarge8 extends StatelessWidget {
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: TextField(
+                      controller: _phoneController,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        contentPadding: EdgeInsets.only(left: 16, top: 16, bottom: 16),
+                        contentPadding:
+                            EdgeInsets.only(left: 16, top: 16, bottom: 16),
                         hintText: 'Τηλέφωνο',
                         hintStyle: TextStyle(
                           color: Color(0xFF1E1E1E),
@@ -170,9 +269,11 @@ class AndroidLarge8 extends StatelessWidget {
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: TextField(
+                      controller: _passwordController,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        contentPadding: EdgeInsets.only(left: 16, top: 16, bottom: 16),
+                        contentPadding:
+                            EdgeInsets.only(left: 16, top: 16, bottom: 16),
                         hintText: 'Kωδικός πρόσβασης',
                         hintStyle: TextStyle(
                           color: Color(0xFF1E1E1E),
@@ -197,9 +298,11 @@ class AndroidLarge8 extends StatelessWidget {
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: TextField(
+                      controller: _confirmPasswordController,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        contentPadding: EdgeInsets.only(left: 16, top: 16, bottom: 16),
+                        contentPadding:
+                            EdgeInsets.only(left: 16, top: 16, bottom: 16),
                         hintText: 'Επιβεβαίωση κωδικού πρόσβασης',
                         hintStyle: TextStyle(
                           color: Color(0xFF1E1E1E),
@@ -220,13 +323,7 @@ class AndroidLarge8 extends StatelessWidget {
                     width: 310,
                     height: 51,
                     child: ElevatedButton(
-                      onPressed: () {
-                        // Navigate to AndroidLarge9 when the button is pressed
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => AndroidLarge9()),
-                        );
-                      },
+                      onPressed: _validateAndProceed,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFFE4572E),
                         shape: RoundedRectangleBorder(

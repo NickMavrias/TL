@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'android_large_6.dart'; // Make sure this path matches the location of your AndroidLarge6 file
+import 'android_large_8.dart'; // Add this import statement
 
 void main() {
   runApp(MyApp());
@@ -34,7 +35,8 @@ class _SplashScreenState extends State<SplashScreen> {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (_currentIndex == 6) {
         timer.cancel();
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => AndroidLarge4()));
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (_) => AndroidLarge4()));
       } else {
         setState(() {
           _currentIndex++;
@@ -60,7 +62,9 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: Center(
         child: SvgPicture.asset(
-          _currentIndex % 2 == 0 ? 'assets/images/logo_telikoCOLOURED-02.svg' : 'assets/images/logo_telikoCOLOURED-02ORANGE-01.svg',
+          _currentIndex % 2 == 0
+              ? 'assets/images/logo_telikoCOLOURED-02.svg'
+              : 'assets/images/logo_telikoCOLOURED-02ORANGE-01.svg',
           width: 360,
           height: 800,
         ),
@@ -117,7 +121,8 @@ class AndroidLarge4 extends StatelessWidget {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => AndroidLarge6()),
+                          MaterialPageRoute(
+                              builder: (context) => AndroidLarge6()),
                         );
                       },
                       child: Container(
@@ -191,26 +196,35 @@ class AndroidLarge4 extends StatelessWidget {
                   Positioned(
                     left: 74.75,
                     top: 623,
-                    child: Container(
-                      width: 211,
-                      height: 48,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: ShapeDecoration(
-                        color: Color(0xFF1E1E1E),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(100),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AndroidLarge8()),
+                        );
+                      },
+                      child: Container(
+                        width: 211,
+                        height: 48,
+                        clipBehavior: Clip.antiAlias,
+                        decoration: ShapeDecoration(
+                          color: Color(0xFF1E1E1E),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(100),
+                          ),
                         ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Εγγραφή',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontFamily: 'Roboto',
-                            fontWeight: FontWeight.w500,
-                            height: 0.10,
-                            letterSpacing: 0.10,
+                        child: Center(
+                          child: Text(
+                            'Εγγραφή',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontFamily: 'Roboto',
+                              fontWeight: FontWeight.w500,
+                              height: 0.10,
+                              letterSpacing: 0.10,
+                            ),
                           ),
                         ),
                       ),

@@ -30,7 +30,7 @@ class AndroidLarge6 extends StatelessWidget {
     }
 
     final url = Uri.parse(
-        'http://192.168.2.8:8080/api/users/login'); // vazoyme tin ip-v4 mas
+        'http://192.168.2.10:8080/api/users/login'); // vazoyme tin ip-v4 mas
     try {
       final response = await http.post(
         url,
@@ -38,12 +38,12 @@ class AndroidLarge6 extends StatelessWidget {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, String>{
-          'username': username,
+          'identifier': username,
           'password': password,
         }),
       );
 
-      if (response.body == "1") {
+      if (response.body == "Login succesful") {
         // If login successful, navigate to next screen
         Navigator.push(
           context,
@@ -291,7 +291,8 @@ class AndroidLarge6 extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => AndroidLarge11()),
+                        MaterialPageRoute(
+                            builder: (context) => AndroidLarge11()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
