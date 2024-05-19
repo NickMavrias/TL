@@ -1,5 +1,6 @@
-// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, prefer_const_literals_to_create_immutables
+//login
 
+// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, prefer_const_literals_to_create_immutables
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -84,7 +85,7 @@ class AndroidLarge6 extends StatelessWidget {
                     textAlign: TextAlign.left,
                     style: TextStyle(
                       color: Color(0xFF1E1E1E),
-                      fontSize: 64,
+                      fontSize: 62,
                       fontFamily: 'Roboto',
                       fontWeight: FontWeight.w900,
                       height: 1,
