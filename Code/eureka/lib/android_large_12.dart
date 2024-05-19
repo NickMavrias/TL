@@ -129,12 +129,18 @@ class CustomizationPageContent extends StatelessWidget {
           return;
         }
 
-        if (index < selectedImages.length || selectedImages.length < 6) {
-          final ImagePicker _picker = ImagePicker();
-          final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-          if (image != null) {
-            onImageSelected(File(image.path));
+        try {
+          if (index < selectedImages.length || selectedImages.length < 6) {
+            final ImagePicker _picker = ImagePicker();
+            final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+            if (image != null) {
+              onImageSelected(File(image.path));
+            }
           }
+        } catch (e) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Failed to pick image: $e"))
+          );
         }
       },
       child: Container(
@@ -172,14 +178,18 @@ class CustomizationPageContent extends StatelessWidget {
   }
 
   // Function to request storage permission
-  Future<bool> requestStoragePermission() async {
-    var status = await Permission.storage.status;
-    if (status.isGranted) {
-      return true;
-    } else if (status.isDenied) {
-      var result = await Permission.storage.request();
-      return result.isGranted;
-    }
+Future<bool> requestStoragePermission() async {
+  var status = await Permission.storage.status;
+  if (status.isGranted) {
+    return true;
+  } else if (status.isDenied) {
+    var result = await Permission.storage.request();
+    return result.isGranted;
+  } else if (status.isPermanentlyDenied) {
+    // Open app settings if permission is permanently denied
+    openAppSettings();
     return false;
   }
+  return false;
+}
 }

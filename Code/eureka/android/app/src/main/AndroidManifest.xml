@@ -42,6 +42,7 @@
         </intent>
     </queries>
 
-    <!-- Add this line below to request permission to read external storage -->
+    <!-- Permissions for internet access and reading external storage -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 </manifest>
