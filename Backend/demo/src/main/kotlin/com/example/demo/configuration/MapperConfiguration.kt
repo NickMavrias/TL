@@ -2,6 +2,7 @@ package com.example.demo.configuration
 
 import com.example.demo.mapper.ImageMapper
 import com.example.demo.mapper.StudentMapper
+import com.example.demo.mapper.StudentNameAndPhotosMapper
 import com.example.demo.mapper.UserMapper
 import org.mapstruct.Mapper
 import org.mapstruct.factory.Mappers
@@ -24,5 +25,10 @@ class MapperConfiguration {
     @Bean
     fun imageMapper(): ImageMapper {
         return Mappers.getMapper(ImageMapper::class.java)
+    }
+
+    @Bean
+    fun studentNameAndPhotosMapperMapper(): StudentNameAndPhotosMapper {
+        return Mappers.getMapper(StudentNameAndPhotosMapper::class.java)
     }
 }

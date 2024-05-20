@@ -2,8 +2,10 @@ package com.example.demo.service.impl
 
 import org.springframework.stereotype.Service
 import com.example.demo.dto.StudentDto
+import com.example.demo.dto.StudentNameAndPhotosDto
 import com.example.demo.mapper.ImageMapper
 import com.example.demo.mapper.StudentMapper
+import com.example.demo.mapper.StudentNameAndPhotosMapper
 import com.example.demo.mapper.UserMapper
 import com.example.demo.repository.ImagesRepository
 import com.example.demo.repository.StudentsRepository
@@ -18,7 +20,8 @@ class StudentServiceImpl(
     private val imagesRepository: ImagesRepository,
     private val userMapper: UserMapper,
     private val studentMapper: StudentMapper,
-    private val imageMapper: ImageMapper
+    private val imageMapper: ImageMapper,
+    private val studentNameAndPhotosMapper: StudentNameAndPhotosMapper
 ) : StudentService {
 
     @Transactional
@@ -38,14 +41,26 @@ class StudentServiceImpl(
         // Save the student entity
         val createdStudent = studentRepository.save(studentEntity)
 
-        // Save the links associated with the student
-        studentDto.images.forEach { imageDto ->
+        // Map the images DTOs to entities and associate them with the created student
+        val imagesEntities = studentDto.images.map { imageDto ->
             val imageEntity = imageMapper.toEntity(imageDto)
-            imageEntity.student = createdStudent // Set the student property
-            imagesRepository.save(imageEntity)
+            imageEntity.student = createdStudent
+            imageEntity
         }
 
-        // Map and return the created student Dto
+        // Save the images associated with the student
+        imagesRepository.saveAll(imagesEntities)
+
+        // Map and return the created student DTO
         return studentMapper.toDto(createdStudent)
+    }
+
+    @Transactional(readOnly = true)
+    override fun getOtherStudents(currentUserId: Long): List<StudentNameAndPhotosDto> {
+        return studentRepository.findAll()
+            .filter { it.user.id != currentUserId }
+            .map { student ->
+                studentNameAndPhotosMapper.toDto(student) // Use the new mapper
+            }
     }
 }

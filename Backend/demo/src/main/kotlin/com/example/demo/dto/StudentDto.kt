@@ -6,19 +6,13 @@ import java.time.LocalDate
 
 data class StudentDto(
     val email: String,
-    val phone: String,
+    val phone: Int,
     val fullname: String,
-    val birthday: LocalDate,
+    val birthday: String,
     val gender: Gender,
     val wantEmail: Boolean,
     val bio: String,
     val interests: Interests,
-    val university: String,
-    val department: String,
-    val etos: String,
-    val emailNotification: Boolean,
-    val pushNotification: Boolean,
-    val smsNotification: Boolean,
     val user: UserDto,
     val images: List<ImageDto>  // Add this line to include links
 )

@@ -27,13 +27,13 @@ data class Student(
     var email: String,
 
     @Column(name = "phone", nullable = false)
-    var phone: String,
+    var phone: Int,
 
     @Column(name = "fullname", nullable = false)
     var fullname: String,
 
     @Column(name = "birthday", nullable = false)
-    val birthday: LocalDate,
+    val birthday: String,
 
     @Column(name = "gender", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -48,24 +48,6 @@ data class Student(
     @Column(name = "interests", nullable = false)
     @Enumerated(EnumType.STRING)
     var interests: Interests,
-
-    @Column(name = "university", nullable = false)
-    var university: String,
-
-    @Column(name = "department", nullable = false)
-    var department: String,
-
-    @Column(name = "etos", nullable = false)
-    var etos: String,
-
-    @Column(name = "email_notification", nullable = false)
-    var emailNotification: Boolean,
-
-    @Column(name = "push_notification", nullable = false)
-    var pushNotification: Boolean,
-
-    @Column(name = "sms_notification", nullable = false)
-    var smsNotification: Boolean,
 
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "user_id", referencedColumnName = "id")
