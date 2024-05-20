@@ -3,8 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart'; // Import flutter_svg
 import 'android_large13.dart'; // Make sure to import AndroidLarge13
 import 'package:swipe_cards/swipe_cards.dart';
+import 'dart:ui' as ui; // Import for ImageFilter
+import 'android_large14.dart';
 
 class AndroidLarge11 extends StatefulWidget {
+  final bool blurBackground;
+
+  AndroidLarge11({this.blurBackground = false});
+
   @override
   _AndroidLarge11State createState() => _AndroidLarge11State();
 }
@@ -82,6 +88,15 @@ class _AndroidLarge11State extends State<AndroidLarge11> {
               onStackFinished: () => print("Stack Finished"),
             ),
           ),
+           if (widget.blurBackground) // Conditional blur overlay
+            Positioned.fill(
+              child: BackdropFilter(
+                filter: ui.ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                child: Container(
+                  color: Colors.black.withOpacity(0.1),
+                ),
+              ),
+            ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -94,6 +109,12 @@ class _AndroidLarge11State extends State<AndroidLarge11> {
           if (index == 1) { // If second icon is tapped
             Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => AndroidLarge13()),
+            );
+            
+          }
+          else if (index == 2){
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => AndroidLarge14()),
             );
           }
         },

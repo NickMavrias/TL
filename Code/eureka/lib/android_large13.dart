@@ -149,6 +149,16 @@ class ChatScreen extends StatelessWidget {
                     // Handle send message
                   },
                 ),
+                IconButton(
+                  icon: Icon(Icons.blur_on), // Choose an appropriate icon
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => AndroidLarge11(blurBackground: true),
+                      ),
+                    );
+                  },
+                ),
               ],
             ),
           ),
