@@ -8,6 +8,7 @@ import org.mapstruct.Mapping
 @Mapper(componentModel = "spring", uses = [ImageMapper::class])
 interface StudentNameAndPhotosMapper {
 
+    @Mapping(source = "id", target = "id")
     @Mapping(source = "fullname", target = "fullname")
     @Mapping(source = "images", target = "images")
     fun toDto(student: Student): StudentNameAndPhotosDto

@@ -60,7 +60,7 @@ class StudentServiceImpl(
         return studentRepository.findAll()
             .filter { it.user.id != currentUserId }
             .map { student ->
-                studentNameAndPhotosMapper.toDto(student) // Use the new mapper
+                studentNameAndPhotosMapper.toDto(student)
             }
     }
 }
