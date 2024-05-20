@@ -5,5 +5,11 @@ import com.example.demo.dto.StudentNameAndPhotosDto
 
 interface StudentService {
     fun createStudent(studentDto: StudentDto): StudentDto
-    fun getOtherStudents(currentUserId: Long): List<StudentNameAndPhotosDto> // New method
+    fun getOtherStudents(currentUserId: Long): List<StudentNameAndPhotosDto>
+    fun likeStudent(giverId: Long, receiverId: Long)
+    fun dislikeStudent(giverId: Long, receiverId: Long)
+    fun superLikeStudent(giverId: Long, receiverId: Long)
+    fun getStudentsByIds(studentIds: List<Long>): List<StudentNameAndPhotosDto>
+    fun getAllStudentsExcept(studentIds: List<Long>): List<StudentNameAndPhotosDto>
 }
+

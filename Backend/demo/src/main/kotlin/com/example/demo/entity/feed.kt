@@ -2,14 +2,13 @@ package com.example.demo.entity
 
 import jakarta.persistence.*
 
-
 @Entity
 @Table(name = "feed") // Renamed to plural form for convention
 data class Feed(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long, // Added primary key
+    val id: Long? = null, // Removed default value
 
     @ManyToOne
     @JoinColumn(name = "giver_id", nullable = false)

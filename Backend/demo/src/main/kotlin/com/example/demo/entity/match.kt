@@ -8,7 +8,7 @@ data class Match(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long, // Added primary key
+    val id: Long? = null, // Removed default value
 
     @ManyToOne
     @JoinColumn(name = "giver_id", nullable = false)
