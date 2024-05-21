@@ -1,8 +1,8 @@
-//match
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart'; // Import flutter_svg
 import 'android_large13.dart'; // Make sure to import AndroidLarge13
 import 'package:swipe_cards/swipe_cards.dart';
+import 'dart:async'; // For Timer
 import 'dart:ui' as ui; // Import for ImageFilter
 import 'android_large14.dart';
 
@@ -19,6 +19,10 @@ class _AndroidLarge11State extends State<AndroidLarge11> {
   List<SwipeItem> swipeItems = [];
   late MatchEngine matchEngine;
   int _currentIndex = 0;
+  Timer? _pomodoroTimer;
+  int _pomodoroRemainingTime = 20 * 60; // 20 minutes in seconds
+  Timer? _hydrationTimer;
+  int _hydrationRemainingTime = 60 * 60; // 60 minutes in seconds
 
   @override
   void initState() {
@@ -60,40 +64,150 @@ class _AndroidLarge11State extends State<AndroidLarge11> {
         nopeAction: () => print("Disliked G"),
         superlikeAction: () => print("Superliked G"),
       ),
-      
     ];
     matchEngine = MatchEngine(swipeItems: swipeItems);
   }
 
   @override
+  void dispose() {
+    _pomodoroTimer?.cancel();
+    _hydrationTimer?.cancel();
+    super.dispose();
+  }
+
+  void startPomodoroTimer() {
+    _pomodoroRemainingTime = 20 * 60; // Reset to 20 minutes
+    _pomodoroTimer?.cancel();
+    _pomodoroTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (_pomodoroRemainingTime > 0) {
+        setState(() {
+          _pomodoroRemainingTime--;
+        });
+      } else {
+        _pomodoroTimer?.cancel();
+      }
+    });
+  }
+
+  void startHydrationTimer() {
+    _hydrationRemainingTime = 60 * 60; // Reset to 60 minutes
+    _hydrationTimer?.cancel();
+    _hydrationTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (_hydrationRemainingTime > 0) {
+        setState(() {
+          _hydrationRemainingTime--;
+        });
+      } else {
+        _hydrationTimer?.cancel();
+      }
+    });
+  }
+
+  String getFormattedTime(int totalSeconds) {
+    int minutes = totalSeconds ~/ 60;
+    int seconds = totalSeconds % 60;
+    return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body: Stack(
         children: [
-          SizedBox(height: 20),
-          Center(
-            child: SvgPicture.asset(
-              'assets/images/logo_telikoCOLOURED-02.svg',
-              height: 100,
-              width: 150,
-            ),
+          Column(
+            children: [
+              SizedBox(height: 20),
+              Center(
+                child: SvgPicture.asset(
+                  'assets/images/logo_telikoCOLOURED-02.svg',
+                  height: 100,
+                  width: 150,
+                ),
+              ),
+              Expanded(
+                child: SwipeCards(
+                  matchEngine: matchEngine,
+                  itemBuilder: (BuildContext context, int index) {
+                    final item = swipeItems[index].content;
+                    return UserCard(content: item);
+                  },
+                  onStackFinished: () => print("Stack Finished"),
+                ),
+              ),
+            ],
           ),
-          Expanded(
-            child: SwipeCards(
-              matchEngine: matchEngine,
-              itemBuilder: (BuildContext context, int index) {
-                final item = swipeItems[index].content;
-                return UserCard(content: item);
-              },
-              onStackFinished: () => print("Stack Finished"),
-            ),
-          ),
-           if (widget.blurBackground) // Conditional blur overlay
+          if (widget.blurBackground) // Conditional blur overlay with Pomodoro and Hydration timer
             Positioned.fill(
-              child: BackdropFilter(
-                filter: ui.ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                child: Container(
-                  color: Colors.black.withOpacity(0.1),
+              child: GestureDetector(
+                onTap: () {}, // Prevents tap through
+                child: Stack(
+                  children: [
+                    BackdropFilter(
+                      filter: ui.ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                      child: Container(
+                        color: Colors.black.withOpacity(0.1),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: IconButton(
+                          icon: Icon(Icons.close, color: Colors.white),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                      ),
+                    ),
+                    Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'In session',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          SizedBox(height: 30),
+                          ElevatedButton(
+                            onPressed: startPomodoroTimer,
+                            child: Text('Start Pomodoro'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.orange, // Orange color for the Pomodoro button
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          Text(
+                            getFormattedTime(_pomodoroRemainingTime),
+                            style: TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          ElevatedButton(
+                            onPressed: startHydrationTimer,
+                            child: Text('Start Hydration Timer'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.lightBlue, // Light Blue color for the Hydration button
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          Text(
+                            getFormattedTime(_hydrationRemainingTime),
+                            style: TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -110,9 +224,7 @@ class _AndroidLarge11State extends State<AndroidLarge11> {
             Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => AndroidLarge13()),
             );
-            
-          }
-          else if (index == 2){
+          } else if (index == 2) {
             Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => AndroidLarge14()),
             );
@@ -163,7 +275,8 @@ class UserCard extends StatelessWidget {
             color: Colors.black.withOpacity(0.15),
             spreadRadius: 4,
             blurRadius: 10,
-        )]
+          )
+        ],
       ),
       child: Stack(
         children: [
