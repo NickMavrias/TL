@@ -43,6 +43,15 @@ class StudentController(private val studentService: StudentService,
         return ResponseEntity(allStudents, HttpStatus.OK)
     }
 
+    @GetMapping("/matched")
+    fun getMatchedStudents(): ResponseEntity<List<StudentNameAndPhotosDto>> {
+        val currentUser = httpSession.getAttribute("user") as? User ?:
+        return ResponseEntity(HttpStatus.UNAUTHORIZED)
+
+        val matchedStudents = studentService.getMatchedStudents(currentUser.id)
+        return ResponseEntity(matchedStudents, HttpStatus.OK)
+    }
+
 
     @PostMapping("/{id}/like")
     fun likeStudent(@PathVariable id: Long, httpServletRequest: HttpServletRequest): ResponseEntity<Void> {

@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface MatchRepository : JpaRepository<Match, Long> {
     fun findByGiverIdAndReceiverId(giverId: Long, receiverId: Long): Match?
+    fun findByGiverIdOrReceiverId(giverId: Long, receiverId: Long): List<Match>
 }

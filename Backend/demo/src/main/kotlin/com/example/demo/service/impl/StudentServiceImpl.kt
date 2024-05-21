@@ -67,6 +67,17 @@ class StudentServiceImpl(
     }
 
     @Transactional(readOnly = true)
+    override fun getMatchedStudents(currentUserId: Long): List<StudentNameAndPhotosDto> {
+        val matches = matchRepository.findByGiverIdOrReceiverId(currentUserId, currentUserId)
+        val matchedStudentIds = matches.flatMap {
+            listOf(it.giver.id, it.receiver.id)
+        }.filterNot { it == currentUserId }
+
+        return studentRepository.findAllById(matchedStudentIds)
+            .map { studentNameAndPhotosMapper.toDto(it) }
+    }
+
+    @Transactional(readOnly = true)
     override fun getStudentsByIds(studentIds: List<Long>): List<StudentNameAndPhotosDto> {
         return studentRepository.findAllById(studentIds)
             .map { student ->

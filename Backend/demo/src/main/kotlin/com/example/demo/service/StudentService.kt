@@ -6,6 +6,7 @@ import com.example.demo.dto.StudentNameAndPhotosDto
 interface StudentService {
     fun createStudent(studentDto: StudentDto): StudentDto
     fun getOtherStudents(currentUserId: Long): List<StudentNameAndPhotosDto>
+    fun getMatchedStudents(currentUserId: Long): List<StudentNameAndPhotosDto>
     fun likeStudent(giverId: Long, receiverId: Long)
     fun dislikeStudent(giverId: Long, receiverId: Long)
     fun superLikeStudent(giverId: Long, receiverId: Long)
