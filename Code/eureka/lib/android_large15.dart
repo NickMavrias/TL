@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:your_app_name/android_large16.dart';
+
+import 'android_large13.dart';
+import 'androidlarge11.dart';
 
 void main() {
   runApp(MaterialApp(home: AndroidLarge15()));
@@ -98,7 +102,24 @@ class _AndroidLarge15State extends State<AndroidLarge15> {
         onTap: (index) {
           setState(() {
             _currentIndex = index;
-            // Navigational logic is retained exactly as you defined
+            if (index == 0){
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => AndroidLarge11()),
+            );
+          }
+          else if (index == 1){
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => AndroidLarge13()),
+            );
+          }
+          else if (index == 3){
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => AndroidLarge15()));  // Navigate to AndroidLarge15
+            }
+            else if (index == 4){
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => AndroidLarge16()));  // Navigate to AndroidLarge15
+            }
           });
         },
         items: [
