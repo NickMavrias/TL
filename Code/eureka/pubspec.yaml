@@ -29,7 +29,6 @@ flutter:
   # included with your application so that you can use the icons in
   # the Material Icons class.
   uses-material-design: true
-
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/logo_telikoCOLOURED-02.svg
@@ -40,6 +39,8 @@ flutter:
     - assets/images/key2.png
     - assets/images/tButton.png
     - assets/images/bulbEUR.png
+    - assets/images/lamp.svg
+    - assets/images/lamp_selected.svg
     - assets/images/user1.png
     - assets/images/user2.png
     - assets/images/user3.png
