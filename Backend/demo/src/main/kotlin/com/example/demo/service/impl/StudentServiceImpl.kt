@@ -164,4 +164,17 @@ class StudentServiceImpl(
             matchRepository.save(newMatch)
         }
     }
+
+    @Transactional
+    override fun unMatchStudent(loggedInUserId: Long, otherStudentId: Long) {
+        val existingMatch = matchRepository.findByGiverIdAndReceiverId(loggedInUserId, otherStudentId)
+            ?: matchRepository.findByGiverIdAndReceiverId(otherStudentId, loggedInUserId)
+
+        if (existingMatch != null) {
+            existingMatch.isMatch = false
+            matchRepository.save(existingMatch)
+        } else {
+            throw RuntimeException("Match not found between the given students")
+        }
+    }
 }

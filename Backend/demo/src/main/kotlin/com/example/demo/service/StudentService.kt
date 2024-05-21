@@ -12,5 +12,6 @@ interface StudentService {
     fun superLikeStudent(giverId: Long, receiverId: Long)
     fun getStudentsByIds(studentIds: List<Long>): List<StudentNameAndPhotosDto>
     fun getAllStudentsExcept(studentIds: List<Long>): List<StudentNameAndPhotosDto>
+    fun unMatchStudent(loggedInUserId: Long, otherStudentId: Long)
 }
 

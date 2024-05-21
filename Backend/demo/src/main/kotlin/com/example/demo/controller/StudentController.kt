@@ -73,4 +73,11 @@ class StudentController(private val studentService: StudentService,
         studentService.likeStudent(loggedInUserId, id)
         return ResponseEntity.ok().build()
     }
+
+    @PostMapping("/{id}/unmatch")
+    fun unMatchStudent(@PathVariable id: Long, httpServletRequest: HttpServletRequest): ResponseEntity<Void> {
+        val loggedInUserId = (httpServletRequest.session.getAttribute("user") as User).id
+        studentService.unMatchStudent(loggedInUserId, id)
+        return ResponseEntity.ok().build()
+    }
 }
