@@ -25,4 +25,10 @@ class ChatController(private val chatMessageService: ChatMessageService) {
         chatMessageService.saveMessage(chatMessage)
         return chatMessage
     }
+
+    @MessageMapping("/chat.navigate")
+    @SendTo("/topic/session")
+    fun navigate(@Payload chatMessage: ChatMessageDto): ChatMessageDto {
+        return chatMessage
+    }
 }
