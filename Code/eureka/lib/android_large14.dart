@@ -1,6 +1,10 @@
 //epafes
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:your_app_name/android_large13.dart';
+import 'package:your_app_name/android_large15.dart';
+
+import 'androidlarge11.dart';
 
 class AndroidLarge14 extends StatefulWidget {
   @override
@@ -56,11 +60,7 @@ class _AndroidLarge14State extends State<AndroidLarge14> {
             imagePath: 'assets/images/user3.png',
             dateRead: 'Διαβάσατε στις 31/10/2013',
           ),
-          UserTile(
-            name: 'Άρτεμις',
-            imagePath: 'assets/images/user4.png',
-            dateRead: 'Διαβάσατε στις 19/3/2024',
-          ),
+          
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -68,7 +68,20 @@ class _AndroidLarge14State extends State<AndroidLarge14> {
         onTap: (index) {
           setState(() {
             _currentIndex = index;
-            // Handle navigation based on the index
+            if (index == 0){
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => AndroidLarge11()),
+            );
+          }
+          else if (index == 1){
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => AndroidLarge13()),
+            );
+          }
+          else if (index == 3){
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => AndroidLarge15()));  // Navigate to AndroidLarge15
+            }
           });
         },
         items: [

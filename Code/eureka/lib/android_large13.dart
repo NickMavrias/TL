@@ -1,6 +1,6 @@
-//minimata
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'androidlarge11.dart';
 import 'android_large14.dart';
 
@@ -16,6 +16,11 @@ class _AndroidLarge13State extends State<AndroidLarge13> {
     setState(() {
       _currentIndex = index;
     });
+    if (index == 2) {
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => AndroidLarge14()),
+      );
+    }
   }
 
   @override
@@ -59,21 +64,7 @@ class _AndroidLarge13State extends State<AndroidLarge13> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-          if (index == 0) { // If first icon is tapped
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => AndroidLarge11()),
-            );
-          }
-          else if (index == 2){
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => AndroidLarge14()),
-            );
-          }
-        },
+        onTap: _onItemTapped,
         items: [
           BottomNavigationBarItem(
             icon: Image.asset('assets/images/iconM1.png', width: 24),
@@ -108,6 +99,127 @@ class ChatScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<String> shops = ['Shop 1', 'Shop 2', 'Shop 3'];
+
+    void _showLoadingScreen(BuildContext dialogContext) {
+      showDialog(
+        context: dialogContext,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return Dialog(
+            child: Container(
+              padding: EdgeInsets.all(20),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CircularProgressIndicator(),
+                  SizedBox(width: 30),
+                  Text("Awaiting confirmation \nfrom the cafe and match.."),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+
+      Future.delayed(Duration(seconds: 5), () {
+        if (Navigator.of(context).canPop()) Navigator.of(context).pop();
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => AndroidLarge11(blurBackground: true)),
+        );
+      });
+    }
+
+    Future<void> _showPreBlurDialog() async {
+      String? selectedShop = shops[0];
+      DateTime selectedDate = DateTime.now();
+      TimeOfDay selectedTime = TimeOfDay.now();
+
+    ThemeData orangeTheme = ThemeData(
+        primaryColor: Colors.orange[900], // Using the orange 900 shade
+        colorScheme: ColorScheme.light(
+          primary: Colors.orange[900]!,
+          onPrimary: Colors.white, // Text color on the primary color
+          onSurface: Colors.black, // Text color on background/surface
+        ),
+        dialogBackgroundColor: Colors.white,
+      );
+
+      await showDialog(
+        context: context,
+        builder: (context) {
+          return Theme(
+            data: orangeTheme,
+            child: AlertDialog(
+              title: Text("Schedule Rendezvous"),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text("Select Shop:"),
+                  DropdownButton<String>(
+                    value: selectedShop,
+                    onChanged: (value) {
+                      (context as Element).markNeedsBuild();
+                      selectedShop = value;
+                    },
+                    items: shops.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                  SizedBox(height: 20),
+                  Text("Select Date:"),
+                  ListTile(
+                    title: Text(DateFormat('yyyy-MM-dd').format(selectedDate)),
+                    trailing: Icon(Icons.calendar_today),
+                    onTap: () async {
+                      final DateTime? pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: selectedDate,
+                        firstDate: DateTime.now(),
+                        lastDate: DateTime(2100),
+                      );
+                      if (pickedDate != null) {
+                        (context as Element).markNeedsBuild();
+                        selectedDate = pickedDate;
+                      }
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  Text("Select Time:"),
+                  ListTile(
+                    title: Text(selectedTime.format(context)),
+                    trailing: Icon(Icons.access_time),
+                    onTap: () async {
+                      final TimeOfDay? pickedTime = await showTimePicker(
+                        context: context,
+                        initialTime: selectedTime,
+                      );
+                      if (pickedTime != null) {
+                        (context as Element).markNeedsBuild();
+                        selectedTime = pickedTime;
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              ElevatedButton(
+                child: Text("Invite"),
+                onPressed: () {
+                  Navigator.of(context).pop();  // Close the dialog
+                  _showLoadingScreen(context);  // Show loading indicator
+                },
+              ),
+            ],
+          ));
+        },
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Chat with $name'),
@@ -125,9 +237,7 @@ class ChatScreen extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Container(
-              // Implement chat messages list view here
-            ),
+            child: Container(),
           ),
           Padding(
             padding: EdgeInsets.all(8.0),
@@ -148,6 +258,10 @@ class ChatScreen extends StatelessWidget {
                   onPressed: () {
                     // Handle send message
                   },
+                ),
+                IconButton(
+                  icon: Icon(Icons.blur_on),
+                  onPressed: () => _showPreBlurDialog(),
                 ),
               ],
             ),
