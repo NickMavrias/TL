@@ -1,17 +1,11 @@
 package com.example.demo.service.impl
 
-import com.example.demo.dto.ReportDto
-import com.example.demo.dto.Role
+import com.example.demo.dto.*
 import org.springframework.stereotype.Service
-import com.example.demo.dto.StudentDto
-import com.example.demo.dto.StudentNameAndPhotosDto
 import com.example.demo.entity.Feed
 import com.example.demo.entity.Match
 import com.example.demo.entity.Report
-import com.example.demo.mapper.ImageMapper
-import com.example.demo.mapper.StudentMapper
-import com.example.demo.mapper.StudentNameAndPhotosMapper
-import com.example.demo.mapper.UserMapper
+import com.example.demo.mapper.*
 import com.example.demo.repository.*
 import com.example.demo.service.StudentService
 import org.springframework.transaction.annotation.Transactional
@@ -24,10 +18,14 @@ class StudentServiceImpl(
     private val matchRepository: MatchRepository,
     private val feedRepository: FeedRepository,
     private val reportRepository: ReportRepository,
+    private val evaluateStudentRepository: EvaluateStudentRepository,
+    private val evaluateCafeRepository: EvaluateCafeRepository,
     private val userMapper: UserMapper,
     private val studentMapper: StudentMapper,
     private val imageMapper: ImageMapper,
-    private val studentNameAndPhotosMapper: StudentNameAndPhotosMapper
+    private val studentNameAndPhotosMapper: StudentNameAndPhotosMapper,
+    private val evaluateCafeMapper: EvaluateCafeMapper,
+    private val evaluateStudentMapper: EvaluateStudentMapper
 ) : StudentService {
 
     @Transactional
@@ -208,5 +206,14 @@ class StudentServiceImpl(
             match.isMatch = false
             matchRepository.save(match)
         }
+    }
+
+    @Transactional(readOnly = true)
+    override fun getEvaluationsByEvaluatorId(evaluatorId: Long): EvaluationsDto {
+        val cafeEvaluations = evaluateCafeRepository.findByEvaluatorId(evaluatorId)
+            .map { evaluateCafeMapper.toDto(it) }
+        val studentEvaluations = evaluateStudentRepository.findByEvaluatorId(evaluatorId)
+            .map { evaluateStudentMapper.toDto(it) }
+        return EvaluationsDto(studentEvaluations, cafeEvaluations)
     }
 }

@@ -1,5 +1,6 @@
 package com.example.demo.controller
 
+import com.example.demo.dto.EvaluationsDto
 import com.example.demo.dto.ReportDto
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -88,4 +89,11 @@ class StudentController(private val studentService: StudentService,
         studentService.reportStudent(loggedInUser.id, reportDto)
         return ResponseEntity.ok().build()
     }
+
+    @GetMapping("/evaluator/{id}")
+    fun getEvaluationsByEvaluatorId(@PathVariable id: Long): ResponseEntity<EvaluationsDto> {
+        val evaluations = studentService.getEvaluationsByEvaluatorId(id)
+        return ResponseEntity.ok(evaluations)
+    }
+
 }
