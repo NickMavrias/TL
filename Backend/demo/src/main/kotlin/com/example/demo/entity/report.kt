@@ -7,7 +7,7 @@ import jakarta.persistence.*
 data class Report(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long = 0,
 
     @ManyToOne
     @JoinColumn(name = "reporter_id", referencedColumnName = "id", nullable = false)
@@ -15,5 +15,8 @@ data class Report(
 
     @ManyToOne
     @JoinColumn(name = "reported_person_id", referencedColumnName = "id", nullable = false)
-    var reportedPerson: User
+    var reportedPerson: User,
+
+    @Column(name = "context", nullable = true, columnDefinition = "TEXT")
+    val context: String
 )
