@@ -1,10 +1,13 @@
 package com.example.demo.service.impl
 
+import com.example.demo.dto.ReportDto
+import com.example.demo.dto.Role
 import org.springframework.stereotype.Service
 import com.example.demo.dto.StudentDto
 import com.example.demo.dto.StudentNameAndPhotosDto
 import com.example.demo.entity.Feed
 import com.example.demo.entity.Match
+import com.example.demo.entity.Report
 import com.example.demo.mapper.ImageMapper
 import com.example.demo.mapper.StudentMapper
 import com.example.demo.mapper.StudentNameAndPhotosMapper
@@ -20,6 +23,7 @@ class StudentServiceImpl(
     private val imagesRepository: ImagesRepository,
     private val matchRepository: MatchRepository,
     private val feedRepository: FeedRepository,
+    private val reportRepository: ReportRepository,
     private val userMapper: UserMapper,
     private val studentMapper: StudentMapper,
     private val imageMapper: ImageMapper,
@@ -30,6 +34,9 @@ class StudentServiceImpl(
     override fun createStudent(studentDto: StudentDto): StudentDto {
         // Map the user DTO to an entity
         val userEntity = userMapper.toEntity(studentDto.user)
+
+        // Set the role to STUDENT
+        userEntity.role = Role.STUDENT
 
         // Save the user entity
         val savedUser = userRepository.save(userEntity)
@@ -175,6 +182,31 @@ class StudentServiceImpl(
             matchRepository.save(existingMatch)
         } else {
             throw RuntimeException("Match not found between the given students")
+        }
+    }
+
+    @Transactional
+    override fun reportStudent(loggedInUserId: Long, reportDto: ReportDto) {
+        val reporter = userRepository.findById(loggedInUserId).orElseThrow { RuntimeException("Reporter not found") }
+        val reportedPerson = userRepository.findById(reportDto.reportedPersonId).orElseThrow { RuntimeException("Reported person not found") }
+
+        // Create a new report
+        val report = Report(
+            reporter = reporter,
+            reportedPerson = reportedPerson,
+            context = reportDto.context
+        )
+        reportRepository.save(report)
+
+        // MPOROUME GIA KALUTERH APODOSH NA TSEKAROUME AN REPORTER IS STUDENT PRIN ARXISEI NA PSAXNEI
+        // OLO TO TABLE MATCH
+        // Check if a match exists between the reporter and the reported person
+        val match = matchRepository.findByGiverIdAndReceiverId(loggedInUserId, reportDto.reportedPersonId)
+            ?: matchRepository.findByGiverIdAndReceiverId(reportDto.reportedPersonId, loggedInUserId)
+
+        if (match != null) {
+            match.isMatch = false
+            matchRepository.save(match)
         }
     }
 }

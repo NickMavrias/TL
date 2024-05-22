@@ -1,5 +1,6 @@
 package com.example.demo.service
 
+import com.example.demo.dto.ReportDto
 import com.example.demo.dto.StudentDto
 import com.example.demo.dto.StudentNameAndPhotosDto
 
@@ -13,5 +14,6 @@ interface StudentService {
     fun getStudentsByIds(studentIds: List<Long>): List<StudentNameAndPhotosDto>
     fun getAllStudentsExcept(studentIds: List<Long>): List<StudentNameAndPhotosDto>
     fun unMatchStudent(loggedInUserId: Long, otherStudentId: Long)
+    fun reportStudent(loggedInUserId: Long, reportDto: ReportDto)
 }
 
