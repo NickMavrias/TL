@@ -1,7 +1,10 @@
 package com.example.demo.entity
 
+import com.example.demo.dto.Role
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
@@ -19,5 +22,9 @@ data class User(
     var username: String,
 
     @Column(name = "password", nullable = false)
-    var password: String
+    var password: String,
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    var role: Role
 )
