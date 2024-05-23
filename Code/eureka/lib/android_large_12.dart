@@ -3,21 +3,82 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:your_app_name/android_large_7.dart'; // Update with your actual package name
 
 class AndroidLarge12 extends StatelessWidget {
-  const AndroidLarge12({Key? key}) : super(key: key);
+  final String username;
+  final String email;
+  final String phone;
+  final String password;
+  final String name;
+  final String birthday;
+  final String gender;
+  final bool newsletter;
+  final String bio;
+  final List<String> interests;
+
+  const AndroidLarge12({
+    Key? key,
+    required this.username,
+    required this.email,
+    required this.phone,
+    required this.password,
+    required this.name,
+    required this.birthday,
+    required this.gender,
+    required this.newsletter,
+    required this.bio,
+    required this.interests,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PhotoCustomizationScreen(),
+      body: PhotoCustomizationScreen(
+        username: username,
+        email: email,
+        phone: phone,
+        password: password,
+        name: name,
+        birthday: birthday,
+        gender: gender,
+        newsletter: newsletter,
+        bio: bio,
+        interests: interests,
+      ),
     );
   }
 }
 
 class PhotoCustomizationScreen extends StatefulWidget {
+  final String username;
+  final String email;
+  final String phone;
+  final String password;
+  final String name;
+  final String birthday;
+  final String gender;
+  final bool newsletter;
+  final String bio;
+  final List<String> interests;
+
+  const PhotoCustomizationScreen({
+    Key? key,
+    required this.username,
+    required this.email,
+    required this.phone,
+    required this.password,
+    required this.name,
+    required this.birthday,
+    required this.gender,
+    required this.newsletter,
+    required this.bio,
+    required this.interests,
+  }) : super(key: key);
+
   @override
-  _PhotoCustomizationScreenState createState() => _PhotoCustomizationScreenState();
+  _PhotoCustomizationScreenState createState() =>
+      _PhotoCustomizationScreenState();
 }
 
 class _PhotoCustomizationScreenState extends State<PhotoCustomizationScreen> {
@@ -31,11 +92,22 @@ class _PhotoCustomizationScreenState extends State<PhotoCustomizationScreen> {
           selectedImages: _selectedImages,
           onImageSelected: (File image) {
             setState(() {
-              if (_selectedImages.length < 6) { // Assuming a maximum of 6 photos can be selected
+              if (_selectedImages.length < 6) {
+                // Assuming a maximum of 6 photos can be selected
                 _selectedImages.add(image);
               }
             });
           },
+          username: widget.username,
+          email: widget.email,
+          phone: widget.phone,
+          password: widget.password,
+          name: widget.name,
+          birthday: widget.birthday,
+          gender: widget.gender,
+          newsletter: widget.newsletter,
+          bio: widget.bio,
+          interests: widget.interests,
         ),
       ],
     );
@@ -45,11 +117,31 @@ class _PhotoCustomizationScreenState extends State<PhotoCustomizationScreen> {
 class CustomizationPageContent extends StatelessWidget {
   final List<File> selectedImages;
   final Function(File) onImageSelected;
+  final String username;
+  final String email;
+  final String phone;
+  final String password;
+  final String name;
+  final String birthday;
+  final String gender;
+  final bool newsletter;
+  final String bio;
+  final List<String> interests;
 
   const CustomizationPageContent({
     Key? key,
     required this.selectedImages,
     required this.onImageSelected,
+    required this.username,
+    required this.email,
+    required this.phone,
+    required this.password,
+    required this.name,
+    required this.birthday,
+    required this.gender,
+    required this.newsletter,
+    required this.bio,
+    required this.interests,
   }) : super(key: key);
 
   @override
@@ -113,7 +205,8 @@ class CustomizationPageContent extends StatelessWidget {
         alignment: WrapAlignment.spaceEvenly,
         spacing: 20,
         runSpacing: 20,
-        children: List.generate(6, (index) => _buildPhotoPlaceholder(context, index)),
+        children:
+            List.generate(6, (index) => _buildPhotoPlaceholder(context, index)),
       ),
     );
   }
@@ -123,24 +216,23 @@ class CustomizationPageContent extends StatelessWidget {
       onTap: () async {
         bool hasPermission = await requestStoragePermission();
         if (!hasPermission) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Permission to access the gallery is required!"))
-          );
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text("Permission to access the gallery is required!")));
           return;
         }
 
         try {
           if (index < selectedImages.length || selectedImages.length < 6) {
             final ImagePicker _picker = ImagePicker();
-            final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+            final XFile? image =
+                await _picker.pickImage(source: ImageSource.gallery);
             if (image != null) {
               onImageSelected(File(image.path));
             }
           }
         } catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Failed to pick image: $e"))
-          );
+              SnackBar(content: Text("Failed to pick image: $e")));
         }
       },
       child: Container(
@@ -149,12 +241,16 @@ class CustomizationPageContent extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border.all(width: 3, color: Color(0xFF1E1E1E)),
           borderRadius: BorderRadius.circular(8),
-          image: index < selectedImages.length ? DecorationImage(
-            image: FileImage(selectedImages[index]),
-            fit: BoxFit.cover,
-          ) : null,
+          image: index < selectedImages.length
+              ? DecorationImage(
+                  image: FileImage(selectedImages[index]),
+                  fit: BoxFit.cover,
+                )
+              : null,
         ),
-        child: index >= selectedImages.length ? Icon(Icons.add, color: Color(0xFF1E1E1E)) : null,
+        child: index >= selectedImages.length
+            ? Icon(Icons.add, color: Color(0xFF1E1E1E))
+            : null,
       ),
     );
   }
@@ -164,13 +260,31 @@ class CustomizationPageContent extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          foregroundColor: Colors.white, backgroundColor: Colors.deepOrange,
+          foregroundColor: Colors.white,
+          backgroundColor: Colors.deepOrange,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(100),
           ),
         ),
         onPressed: () {
-          // Implement the navigation or functionality for the Next button
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AndroidLarge7(
+                username: username,
+                email: email,
+                phone: phone,
+                password: password,
+                name: name,
+                birthday: birthday,
+                gender: gender,
+                newsletter: newsletter,
+                bio: bio,
+                interests: interests,
+                photos: selectedImages,
+              ),
+            ),
+          );
         },
         child: const Text('Επόμενο'),
       ),
@@ -178,18 +292,18 @@ class CustomizationPageContent extends StatelessWidget {
   }
 
   // Function to request storage permission
-Future<bool> requestStoragePermission() async {
-  var status = await Permission.storage.status;
-  if (status.isGranted) {
-    return true;
-  } else if (status.isDenied) {
-    var result = await Permission.storage.request();
-    return result.isGranted;
-  } else if (status.isPermanentlyDenied) {
-    // Open app settings if permission is permanently denied
-    openAppSettings();
+  Future<bool> requestStoragePermission() async {
+    var status = await Permission.storage.status;
+    if (status.isGranted) {
+      return true;
+    } else if (status.isDenied) {
+      var result = await Permission.storage.request();
+      return result.isGranted;
+    } else if (status.isPermanentlyDenied) {
+      // Open app settings if permission is permanently denied
+      openAppSettings();
+      return false;
+    }
     return false;
   }
-  return false;
-}
 }

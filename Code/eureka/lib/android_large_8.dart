@@ -1,4 +1,3 @@
-//register
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
 
 import 'package:flutter/material.dart';
@@ -67,7 +66,14 @@ class _AndroidLarge8State extends State<AndroidLarge8> {
       if (response.body == "Both username and email are unique") {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => AndroidLarge9()),
+          MaterialPageRoute(
+            builder: (context) => AndroidLarge9(
+              username: username,
+              email: email,
+              phone: phone,
+              password: password,
+            ),
+          ),
         );
       } else if (response.body == "Username already exists") {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -159,7 +165,6 @@ class _AndroidLarge8State extends State<AndroidLarge8> {
                   top: 757.27,
                   child: GestureDetector(
                     onTap: () {
-                      // Navigate to the screen specified by android_large_8.dart
                       Navigator.push(
                         context,
                         MaterialPageRoute(

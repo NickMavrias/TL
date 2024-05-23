@@ -1,10 +1,21 @@
-//register2
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart'; // Add this import for date formatting
 import 'package:your_app_name/android_large_10.dart';
 
 class AndroidLarge9 extends StatefulWidget {
+  final String username;
+  final String email;
+  final String phone;
+  final String password;
+
+  AndroidLarge9({
+    required this.username,
+    required this.email,
+    required this.phone,
+    required this.password,
+  });
+
   @override
   _AndroidLarge9State createState() => _AndroidLarge9State();
 }
@@ -88,7 +99,18 @@ class _AndroidLarge9State extends State<AndroidLarge9> {
     } else {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => AndroidLarge10()),
+        MaterialPageRoute(
+          builder: (context) => AndroidLarge10(
+            username: widget.username,
+            email: widget.email,
+            phone: widget.phone,
+            password: widget.password,
+            name: _nameController.text,
+            birthday: _dateController.text,
+            gender: _selectedGender ?? '',
+            newsletter: _newsletterSubscribed,
+          ),
+        ),
       );
     }
   }

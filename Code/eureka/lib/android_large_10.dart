@@ -3,13 +3,34 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'android_large_12.dart'; // Ensure this import is correct
 
 class AndroidLarge10 extends StatefulWidget {
+  final String username;
+  final String email;
+  final String phone;
+  final String password;
+  final String name;
+  final String birthday;
+  final String gender;
+  final bool newsletter;
+
+  const AndroidLarge10({
+    Key? key,
+    required this.username,
+    required this.email,
+    required this.phone,
+    required this.password,
+    required this.name,
+    required this.birthday,
+    required this.gender,
+    required this.newsletter,
+  }) : super(key: key);
+
   @override
   _AndroidLarge10State createState() => _AndroidLarge10State();
 }
 
 class _AndroidLarge10State extends State<AndroidLarge10> {
-  // This set will track the selected interests
   final Set<String> selectedInterests = Set();
+  final TextEditingController _bioController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +85,7 @@ class _AndroidLarge10State extends State<AndroidLarge10> {
                 ),
                 const SizedBox(height: 20),
                 TextField(
+                  controller: _bioController,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(4),
@@ -153,7 +175,20 @@ class _AndroidLarge10State extends State<AndroidLarge10> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const AndroidLarge12()),
+                        MaterialPageRoute(
+                          builder: (context) => AndroidLarge12(
+                            username: widget.username,
+                            email: widget.email,
+                            phone: widget.phone,
+                            password: widget.password,
+                            name: widget.name,
+                            birthday: widget.birthday,
+                            gender: widget.gender,
+                            newsletter: widget.newsletter,
+                            bio: _bioController.text,
+                            interests: selectedInterests.toList(),
+                          ),
+                        ),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -161,7 +196,8 @@ class _AndroidLarge10State extends State<AndroidLarge10> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(100),
                       ),
-                      padding: EdgeInsets.symmetric(horizontal: 100, vertical: 15),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 100, vertical: 15),
                     ),
                     child: Text(
                       'Επόμενο',
@@ -187,7 +223,8 @@ class InterestButton extends StatelessWidget {
   final bool selected;
   final VoidCallback onTap;
 
-  InterestButton({required this.interest, required this.onTap, this.selected = false});
+  InterestButton(
+      {required this.interest, required this.onTap, this.selected = false});
 
   @override
   Widget build(BuildContext context) {
