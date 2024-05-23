@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:your_app_name/android_large_9.dart';
 import 'package:your_app_name/android_large_6.dart';
+
 class AndroidLarge8 extends StatefulWidget {
   @override
   _AndroidLarge8State createState() => _AndroidLarge8State();
@@ -60,7 +61,7 @@ class _AndroidLarge8State extends State<AndroidLarge8> {
     try {
       final response = await http.get(
         Uri.parse(
-            'http://192.168.11.138:8080/api/users/check-unique?username=$username&email=$email'),
+            'http://192.168.2.3:8080/api/users/check-unique?username=$username&email=$email'),
       );
 
       if (response.body == "Both username and email are unique") {
@@ -157,31 +158,32 @@ class _AndroidLarge8State extends State<AndroidLarge8> {
                   left: 184.99,
                   top: 757.27,
                   child: GestureDetector(
-                  onTap: () {
-                    // Navigate to the screen specified by android_large_8.dart
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AndroidLarge6()),
-                    );
-                  },
-                  child: SizedBox(
-                    width: 99.94,
-                    height: 23.80,
-                    child: Text(
-                      'Συνδεθείτε τώρα',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Color(0xFFE4572E),
-                        fontSize: 12,
-                        fontFamily: 'Roboto',
-                        fontWeight: FontWeight.w600,
-                        height: 1.2,
-                        letterSpacing: 0.10,
+                    onTap: () {
+                      // Navigate to the screen specified by android_large_8.dart
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AndroidLarge6()),
+                      );
+                    },
+                    child: SizedBox(
+                      width: 99.94,
+                      height: 23.80,
+                      child: Text(
+                        'Συνδεθείτε τώρα',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Color(0xFFE4572E),
+                          fontSize: 12,
+                          fontFamily: 'Roboto',
+                          fontWeight: FontWeight.w600,
+                          height: 1.2,
+                          letterSpacing: 0.10,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
                 Positioned(
                   left: 24.23,
                   top: 259,
