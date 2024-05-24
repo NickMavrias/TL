@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart'; // Make sure to add image_picker in your pubspec.yaml
+import 'package:image_picker/image_picker.dart';
+
+import 'android_large13.dart';
+import 'android_large14.dart';
+import 'android_large15.dart';
+import 'androidlarge11.dart'; // Make sure to add image_picker in your pubspec.yaml
 
 
 class AndroidLarge16 extends StatefulWidget {
@@ -34,6 +39,30 @@ class _AndroidLarge16State extends State<AndroidLarge16> {
         onTap: (index) {
           setState(() {
             _currentIndex = index;
+            if (index == 0){
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => AndroidLarge11()),
+            );
+          }
+          else if (index == 1){
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => AndroidLarge13()),
+            );
+          }
+          else if (index == 2) {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => AndroidLarge14()),
+            );
+          }
+          else if (index == 3){
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => AndroidLarge15()));  // Navigate to AndroidLarge15
+            }
+            else if (index == 4){
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => AndroidLarge16()),
+            );
+          }
           });
         },
         items: [

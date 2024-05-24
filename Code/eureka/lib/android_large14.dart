@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:your_app_name/android_large13.dart';
 import 'package:your_app_name/android_large15.dart';
 
+import 'android_large16.dart';
 import 'androidlarge11.dart';
 
 class AndroidLarge14 extends StatefulWidget {
@@ -78,10 +79,20 @@ class _AndroidLarge14State extends State<AndroidLarge14> {
               MaterialPageRoute(builder: (context) => AndroidLarge13()),
             );
           }
+          else if (index == 2) {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => AndroidLarge14()),
+            );
+          }
           else if (index == 3){
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => AndroidLarge15()));  // Navigate to AndroidLarge15
             }
+            else if (index == 4){
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => AndroidLarge16()),
+            );
+          }
           });
         },
         items: [

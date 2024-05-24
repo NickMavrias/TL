@@ -5,6 +5,8 @@ import 'package:swipe_cards/swipe_cards.dart';
 import 'dart:async'; // For Timer
 import 'dart:ui' as ui; // Import for ImageFilter
 import 'android_large14.dart';
+import 'android_large15.dart';
+import 'android_large16.dart';
 
 class AndroidLarge11 extends StatefulWidget {
   final bool blurBackground;
@@ -220,13 +222,27 @@ class _AndroidLarge11State extends State<AndroidLarge11> {
           setState(() {
             _currentIndex = index;
           });
-          if (index == 1) { // If second icon is tapped
+          if (index == 0){
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => AndroidLarge11()),
+            );
+          }
+          else if (index == 1) { // If second icon is tapped
             Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => AndroidLarge13()),
             );
           } else if (index == 2) {
             Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => AndroidLarge14()),
+            );
+          }
+          else if (index == 3){
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => AndroidLarge15()));  // Navigate to AndroidLarge15
+            }
+            else if (index == 4){
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => AndroidLarge16()),
             );
           }
         },

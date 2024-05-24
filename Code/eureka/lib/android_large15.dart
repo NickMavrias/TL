@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:your_app_name/android_large16.dart';
 
 import 'android_large13.dart';
+import 'android_large14.dart';
 import 'androidlarge11.dart';
 
 void main() {
@@ -110,6 +111,11 @@ class _AndroidLarge15State extends State<AndroidLarge15> {
           else if (index == 1){
             Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => AndroidLarge13()),
+            );
+          }
+          else if (index == 2) {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => AndroidLarge14()),
             );
           }
           else if (index == 3){
