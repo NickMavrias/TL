@@ -30,35 +30,18 @@ class StudentServiceImpl(
 
     @Transactional
     override fun createStudent(studentDto: StudentDto): StudentDto {
-        // Map the user DTO to an entity
         val userEntity = userMapper.toEntity(studentDto.user)
-
-        // Set the role to STUDENT
         userEntity.role = Role.STUDENT
-
-        // Save the user entity
         val savedUser = userRepository.save(userEntity)
-
-        // Map the student DTO to an entity
         val studentEntity = studentMapper.toEntity(studentDto)
-
-        // Set the user property of the student entity
         studentEntity.user = savedUser
-
-        // Save the student entity
         val createdStudent = studentRepository.save(studentEntity)
-
-        // Map the images DTOs to entities and associate them with the created student
         val imagesEntities = studentDto.images.map { imageDto ->
             val imageEntity = imageMapper.toEntity(imageDto)
             imageEntity.student = createdStudent
             imageEntity
         }
-
-        // Save the images associated with the student
         imagesRepository.saveAll(imagesEntities)
-
-        // Map and return the created student Dto
         return studentMapper.toDto(createdStudent)
     }
 

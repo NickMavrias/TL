@@ -12,7 +12,6 @@ class EvaluateStudentController(
 
     @PostMapping
     fun evaluateStudent(@RequestBody evaluateStudentDto: EvaluateStudentDto): EvaluateStudentDto {
-        // Call the service method to evaluate the student
         return evaluateStudentService.evaluateStudent(evaluateStudentDto)
     }
 }
