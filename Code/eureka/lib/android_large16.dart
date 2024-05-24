@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart'; // Make sure to add image_picker in your pubspec.yaml
+import 'package:image_picker/image_picker.dart';
+import 'package:your_app_name/android_large_10.dart';
+
+import 'android_large13.dart';
+import 'android_large14.dart';
+import 'android_large15.dart';
+import 'androidlarge11.dart'; // Make sure to add image_picker in your pubspec.yaml
 
 
 class AndroidLarge16 extends StatefulWidget {
@@ -9,7 +15,7 @@ class AndroidLarge16 extends StatefulWidget {
 
 class _AndroidLarge16State extends State<AndroidLarge16> {
   int _currentIndex = 3;
-  List<int> _ratings = [0, 0, 0];
+  //List<int> _ratings = [0, 0, 0];
   String selectedSchoolFilter = "Ίδια με εμένα";
   String selectedReadingStyle = "Χωρίς διαλλείματα και ομιλία";
   final ImagePicker _picker = ImagePicker();
@@ -34,6 +40,30 @@ class _AndroidLarge16State extends State<AndroidLarge16> {
         onTap: (index) {
           setState(() {
             _currentIndex = index;
+            if (index == 0){
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => AndroidLarge11()),
+            );
+          }
+          else if (index == 1){
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => AndroidLarge13()),
+            );
+          }
+          else if (index == 2) {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => AndroidLarge14()),
+            );
+          }
+          else if (index == 3){
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => AndroidLarge15()));  // Navigate to AndroidLarge15
+            }
+            else if (index == 4){
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => AndroidLarge16()),
+            );
+          }
           });
         },
         items: [
@@ -92,25 +122,47 @@ class _AndroidLarge16State extends State<AndroidLarge16> {
           padding: const EdgeInsets.all(8.0),
           child: Text('Change Interests', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
         ),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Wrap(
-            spacing: 10,
-            runSpacing: 10,
-            children: [
-              for (String interest in [
-                'Γυμναστήριο', 'Netflix', 'Μαγειρική', 'Τζόγος', 'Escape rooms', 'Κατοικίδια',
-                'Brunch', 'Single malt', 'Κρασί', 'DnD', 'Μπύρα', 'Βινύλια', 'Self care',
-                'Mindfullness', 'Burger', 'Sushi', 'Fine dining', 'Pub crawls', 'Pizza', 'Outdoors',
-                'Πιτόγυρα', 'Καφές', 'Επιτραπέζια', 'Βιβλία', 'Μουσική', 'Κλαμπινγκ', 'Αθλήματα'
-              ])
-                Chip(
-                  label: Text(interest),
-                  onDeleted: () {},
+        
+            const SizedBox(height: 10),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Wrap(
+                    spacing: 10,
+                    runSpacing: 10,
+                    children: [
+                      for (String interest in [
+                        'Γυμναστήριο',
+                        'Netflix',
+                        'Μαγειρική',
+                        'Τζόγος',
+                        'Escape rooms',
+                        'Κατοικίδια',
+                        'Brunch',
+                        'Single malt',
+                        'Κρασί',
+                        'DnD',
+                        'Μπύρα',
+                        'Βινύλια',
+                        'Self care',
+                        'Mindfullness',
+                        'Burger',
+                        'Sushi',
+                        'Fine dining',
+                        'Pub crawls',
+                        'Pizza',
+                        'Outdoors',
+                        'Πιτόγυρα',
+                        'Καφές',
+                        'Επιτραπέζια',
+                        'Βιβλία',
+                        'Μουσική',
+                        'Κλαμπινγκ',
+                        'Αθλήματα'
+                      ])
+                        InterestButton(interest: interest),
+                    ],
+                  ),
                 ),
-            ],
-          ),
-        ),
       ],
     );
   }

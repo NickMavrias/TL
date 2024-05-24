@@ -56,6 +56,7 @@ flutter:
     - assets/images/lik.png
     - assets/images/slik.png
     - assets/images/dislik.png
+    - assets/images/tag.png
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 flutter_icons:

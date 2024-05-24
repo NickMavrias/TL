@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:your_app_name/androidlarge11.dart';
+import 'android_large15.dart';
+import 'android_large16.dart';
 import 'androidlarge11.dart';
 import 'android_large14.dart';
 
@@ -20,6 +23,17 @@ class _AndroidLarge13State extends State<AndroidLarge13> {
       Navigator.of(context).push(
         MaterialPageRoute(builder: (context) => AndroidLarge14()),
       );
+    }
+  }
+
+  void handleAction(String value, int index) {
+    // Example of how to handle actions. Implement according to your needs.
+    if (value == 'Unmatch') {
+      print('Unmatched User $index');
+      // Implement your unmatch functionality here.
+    } else if (value == 'Report') {
+      print('Reported User $index');
+      // Implement your report functionality here.
     }
   }
 
@@ -47,7 +61,7 @@ class _AndroidLarge13State extends State<AndroidLarge13> {
                     backgroundImage: AssetImage('assets/images/user${index + 1}.png'),
                   ),
                   title: Text('User $index'),
-                  subtitle: Text('Tap to chat'),
+                  subtitle: Text('Συνομιλήστε τώρα!'),
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
@@ -55,6 +69,21 @@ class _AndroidLarge13State extends State<AndroidLarge13> {
                       ),
                     );
                   },
+                  trailing: PopupMenuButton<String>(
+                    onSelected: (String result) {
+                      handleAction(result, index);
+                    },
+                    itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                      const PopupMenuItem<String>(
+                        value: 'Unmatch',
+                        child: Text('Unmatch'),
+                      ),
+                      const PopupMenuItem<String>(
+                        value: 'Report',
+                        child: Text('Αναφορά'),
+                      ),
+                    ],
+                  ),
                 );
               },
             ),
@@ -62,9 +91,32 @@ class _AndroidLarge13State extends State<AndroidLarge13> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
         currentIndex: _currentIndex,
-        onTap: _onItemTapped,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+            if (index == 0){
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => AndroidLarge11()),
+              );
+            } else if (index == 1){
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => AndroidLarge13()),
+              );
+            } else if (index == 2){
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => AndroidLarge14()),
+              );
+            } else if (index == 3){
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => AndroidLarge15()));  // Navigate to AndroidLarge15
+              } else if (index == 4){
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => AndroidLarge16()),
+              );
+            }
+          });
+        },
         items: [
           BottomNavigationBarItem(
             icon: Image.asset('assets/images/iconM1.png', width: 24),
@@ -99,7 +151,7 @@ class ChatScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> shops = ['Shop 1', 'Shop 2', 'Shop 3'];
+    final List<String> shops = ['Tag', 'Mosaic', 'Poirot'];
 
     void _showLoadingScreen(BuildContext dialogContext) {
       showDialog(
@@ -114,7 +166,7 @@ class ChatScreen extends StatelessWidget {
                 children: [
                   CircularProgressIndicator(),
                   SizedBox(width: 30),
-                  Text("Awaiting confirmation \nfrom the cafe and match.."),
+                  Text("Περιμένουμε επιβεβαίωση \n από το καφέ και το εύρημα.."),
                 ],
               ),
             ),
@@ -151,11 +203,11 @@ class ChatScreen extends StatelessWidget {
           return Theme(
             data: orangeTheme,
             child: AlertDialog(
-              title: Text("Schedule Rendezvous"),
+              title: Text("Προγραμματισμός ραντεβού"),
             content: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
-                  Text("Select Shop:"),
+                  Text("Επιλέξτε μαγαζί:"),
                   DropdownButton<String>(
                     value: selectedShop,
                     onChanged: (value) {
@@ -170,7 +222,7 @@ class ChatScreen extends StatelessWidget {
                     }).toList(),
                   ),
                   SizedBox(height: 20),
-                  Text("Select Date:"),
+                  Text("Επιλέξτε ημερομηνία:"),
                   ListTile(
                     title: Text(DateFormat('yyyy-MM-dd').format(selectedDate)),
                     trailing: Icon(Icons.calendar_today),
@@ -188,7 +240,7 @@ class ChatScreen extends StatelessWidget {
                     },
                   ),
                   SizedBox(height: 10),
-                  Text("Select Time:"),
+                  Text("Επιλέξτε ώρα:"),
                   ListTile(
                     title: Text(selectedTime.format(context)),
                     trailing: Icon(Icons.access_time),
@@ -208,7 +260,7 @@ class ChatScreen extends StatelessWidget {
             ),
             actions: <Widget>[
               ElevatedButton(
-                child: Text("Invite"),
+                child: Text("Πρόσκληση"),
                 onPressed: () {
                   Navigator.of(context).pop();  // Close the dialog
                   _showLoadingScreen(context);  // Show loading indicator
@@ -222,7 +274,7 @@ class ChatScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chat with $name'),
+        title: Text('Συνομιλία με $name'),
       ),
       body: Column(
         children: <Widget>[
@@ -246,7 +298,7 @@ class ChatScreen extends StatelessWidget {
                 Expanded(
                   child: TextField(
                     decoration: InputDecoration(
-                      hintText: 'Enter a message...',
+                      hintText: 'Γράψτε ένα μήνυμα..',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
