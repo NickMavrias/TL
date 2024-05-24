@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional
 class StudentServiceImpl(
     private val studentRepository: StudentsRepository,
     private val userRepository: UsersRepository,
-    private val imagesRepository: ImagesRepository,
     private val matchRepository: MatchRepository,
     private val feedRepository: FeedRepository,
     private val reportRepository: ReportRepository,
@@ -22,8 +21,7 @@ class StudentServiceImpl(
     private val evaluateCafeRepository: EvaluateCafeRepository,
     private val userMapper: UserMapper,
     private val studentMapper: StudentMapper,
-    private val imageMapper: ImageMapper,
-    private val studentNameAndPhotosMapper: StudentNameAndPhotosMapper,
+//    private val studentNameAndPhotosMapper: StudentNameAndPhotosMapper,
     private val evaluateCafeMapper: EvaluateCafeMapper,
     private val evaluateStudentMapper: EvaluateStudentMapper
 ) : StudentService {
@@ -36,53 +34,47 @@ class StudentServiceImpl(
         val studentEntity = studentMapper.toEntity(studentDto)
         studentEntity.user = savedUser
         val createdStudent = studentRepository.save(studentEntity)
-        val imagesEntities = studentDto.images.map { imageDto ->
-            val imageEntity = imageMapper.toEntity(imageDto)
-            imageEntity.student = createdStudent
-            imageEntity
-        }
-        imagesRepository.saveAll(imagesEntities)
         return studentMapper.toDto(createdStudent)
     }
 
-    @Transactional(readOnly = true)
-    override fun getOtherStudents(currentUserId: Long): List<StudentNameAndPhotosDto> {
-        return studentRepository.findAll()
-            .filter { it.user.id != currentUserId }
-            .map { student ->
-                studentNameAndPhotosMapper.toDto(student)
-            }
-    }
+//    @Transactional(readOnly = true)
+//    override fun getOtherStudents(currentUserId: Long): List<StudentNameAndPhotosDto> {
+//        return studentRepository.findAll()
+//            .filter { it.user.id != currentUserId }
+//            .map { student ->
+//                studentNameAndPhotosMapper.toDto(student)
+//            }
+//    }
 
-    @Transactional(readOnly = true)
-    override fun getMatchedStudents(currentUserId: Long): List<StudentNameAndPhotosDto> {
-        val matches = matchRepository.findByGiverIdOrReceiverId(currentUserId, currentUserId)
-        val matchedStudentIds = matches.flatMap {
-            listOf(it.giver.id, it.receiver.id)
-        }.filterNot { it == currentUserId }
+//    @Transactional(readOnly = true)
+//    override fun getMatchedStudents(currentUserId: Long): List<StudentNameAndPhotosDto> {
+//        val matches = matchRepository.findByGiverIdOrReceiverId(currentUserId, currentUserId)
+//        val matchedStudentIds = matches.flatMap {
+//            listOf(it.giver.id, it.receiver.id)
+//        }.filterNot { it == currentUserId }
+//
+//        return studentRepository.findAllById(matchedStudentIds)
+//            .map { studentNameAndPhotosMapper.toDto(it) }
+//    }
 
-        return studentRepository.findAllById(matchedStudentIds)
-            .map { studentNameAndPhotosMapper.toDto(it) }
-    }
+//    @Transactional(readOnly = true)
+//    override fun getStudentsByIds(studentIds: List<Long>): List<StudentNameAndPhotosDto> {
+//        return studentRepository.findAllById(studentIds)
+//            .map { student ->
+//                studentNameAndPhotosMapper.toDto(student)
+//            }
+//    }
 
-    @Transactional(readOnly = true)
-    override fun getStudentsByIds(studentIds: List<Long>): List<StudentNameAndPhotosDto> {
-        return studentRepository.findAllById(studentIds)
-            .map { student ->
-                studentNameAndPhotosMapper.toDto(student)
-            }
-    }
-
-    @Transactional(readOnly = true)
-    override fun getAllStudentsExcept(studentIds: List<Long>): List<StudentNameAndPhotosDto> {
-        return studentRepository.findAll()
-            .filterNot { student ->
-                student.id in studentIds
-            }
-            .map { student ->
-                studentNameAndPhotosMapper.toDto(student)
-            }
-    }
+//    @Transactional(readOnly = true)
+//    override fun getAllStudentsExcept(studentIds: List<Long>): List<StudentNameAndPhotosDto> {
+//        return studentRepository.findAll()
+//            .filterNot { student ->
+//                student.id in studentIds
+//            }
+//            .map { student ->
+//                studentNameAndPhotosMapper.toDto(student)
+//            }
+//    }
 
     @Transactional
     override fun likeStudent(giverId: Long, receiverId: Long) {

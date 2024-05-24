@@ -32,7 +32,7 @@ data class Student(
     var fullname: String,
 
     @Column(name = "birthday", nullable = false)
-    val birthday: String,
+    var birthday: String,  // Changed from val to var
 
     @Column(name = "gender", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -50,8 +50,5 @@ data class Student(
 
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    var user: User,
-
-    @OneToMany(mappedBy = "student", cascade = [CascadeType.ALL], orphanRemoval = true)
-    var images: MutableList<Image> = mutableListOf() // Define a list of links associated with the student
+    var user: User
 )

@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import com.example.demo.dto.StudentDto
-import com.example.demo.dto.StudentNameAndPhotosDto
 import com.example.demo.entity.User
 import com.example.demo.repository.FeedRepository
 import com.example.demo.service.StudentService
@@ -26,33 +25,33 @@ class StudentController(private val studentService: StudentService,
         return ResponseEntity(createdStudentDto, HttpStatus.CREATED)
     }
 
-    @GetMapping("/other")
-    fun getOtherStudents(): ResponseEntity<List<StudentNameAndPhotosDto>> {
-        val currentUser = httpSession.getAttribute("user") as? User ?:
-        return ResponseEntity(HttpStatus.UNAUTHORIZED)
+//    @GetMapping("/other")
+//    fun getOtherStudents(): ResponseEntity<List<StudentNameAndPhotosDto>> {
+//        val currentUser = httpSession.getAttribute("user") as? User ?:
+//        return ResponseEntity(HttpStatus.UNAUTHORIZED)
+//
+//        // Get the IDs of students with positive interactions (feed with weight = true) with the logged-in user
+//        val interactedStudentIds = feedRepository.findPositiveInteractedStudentIds(currentUser.id)
+//
+//        // Get students with positive interactions
+//        val interactedStudents = studentService.getStudentsByIds(interactedStudentIds)
+//
+//        // Get all students except those with positive interactions
+//        val otherStudents = studentService.getAllStudentsExcept(interactedStudentIds)
+//
+//        // Combine and return the lists
+//        val allStudents = interactedStudents + otherStudents
+//        return ResponseEntity(allStudents, HttpStatus.OK)
+//    }
 
-        // Get the IDs of students with positive interactions (feed with weight = true) with the logged-in user
-        val interactedStudentIds = feedRepository.findPositiveInteractedStudentIds(currentUser.id)
-
-        // Get students with positive interactions
-        val interactedStudents = studentService.getStudentsByIds(interactedStudentIds)
-
-        // Get all students except those with positive interactions
-        val otherStudents = studentService.getAllStudentsExcept(interactedStudentIds)
-
-        // Combine and return the lists
-        val allStudents = interactedStudents + otherStudents
-        return ResponseEntity(allStudents, HttpStatus.OK)
-    }
-
-    @GetMapping("/matched")
-    fun getMatchedStudents(): ResponseEntity<List<StudentNameAndPhotosDto>> {
-        val currentUser = httpSession.getAttribute("user") as? User ?:
-        return ResponseEntity(HttpStatus.UNAUTHORIZED)
-
-        val matchedStudents = studentService.getMatchedStudents(currentUser.id)
-        return ResponseEntity(matchedStudents, HttpStatus.OK)
-    }
+//    @GetMapping("/matched")
+//    fun getMatchedStudents(): ResponseEntity<List<StudentNameAndPhotosDto>> {
+//        val currentUser = httpSession.getAttribute("user") as? User ?:
+//        return ResponseEntity(HttpStatus.UNAUTHORIZED)
+//
+//        val matchedStudents = studentService.getMatchedStudents(currentUser.id)
+//        return ResponseEntity(matchedStudents, HttpStatus.OK)
+//    }
 
 
     @PostMapping("/{id}/like")
