@@ -13,7 +13,6 @@ data class StudentDto(
     val wantEmail: Boolean,
     val bio: String,
     val interests: Interests,
-    val role: Role,
-    val user: UserDto,
-    val images: List<ImageDto>  // Add this line to include links
+    val user: UserDto
+
 )

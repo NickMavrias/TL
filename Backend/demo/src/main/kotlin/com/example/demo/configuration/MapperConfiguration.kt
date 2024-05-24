@@ -17,9 +17,4 @@ class MapperConfiguration {
     fun studentMapper(): StudentMapper {
         return Mappers.getMapper(StudentMapper::class.java)
     }
-
-    @Bean
-    fun imageMapper(): ImageMapper {
-        return Mappers.getMapper(ImageMapper::class.java)
-    }
 }
