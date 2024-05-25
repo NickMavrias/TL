@@ -21,9 +21,9 @@ class StudentServiceImpl(
     private val evaluateCafeRepository: EvaluateCafeRepository,
     private val userMapper: UserMapper,
     private val studentMapper: StudentMapper,
-//    private val studentNameAndPhotosMapper: StudentNameAndPhotosMapper,
     private val evaluateCafeMapper: EvaluateCafeMapper,
-    private val evaluateStudentMapper: EvaluateStudentMapper
+    private val evaluateStudentMapper: EvaluateStudentMapper,
+    private val studentNameAndPhotosMapper: StudentNameAndPhotosMapper
 ) : StudentService {
 
     @Transactional
@@ -37,44 +37,39 @@ class StudentServiceImpl(
         return studentMapper.toDto(createdStudent)
     }
 
-//    @Transactional(readOnly = true)
-//    override fun getOtherStudents(currentUserId: Long): List<StudentNameAndPhotosDto> {
-//        return studentRepository.findAll()
-//            .filter { it.user.id != currentUserId }
-//            .map { student ->
-//                studentNameAndPhotosMapper.toDto(student)
-//            }
-//    }
+    @Transactional(readOnly = true)
+    override fun getOtherStudents(currentUserId: Long): List<StudentNameAndPhotosDto> {
+        val allStudents = studentRepository.findAll()
+        val otherStudents = allStudents.filter { it.user.id != currentUserId }
+        return studentNameAndPhotosMapper.toDtoList(otherStudents)
+    }
 
-//    @Transactional(readOnly = true)
-//    override fun getMatchedStudents(currentUserId: Long): List<StudentNameAndPhotosDto> {
-//        val matches = matchRepository.findByGiverIdOrReceiverId(currentUserId, currentUserId)
-//        val matchedStudentIds = matches.flatMap {
-//            listOf(it.giver.id, it.receiver.id)
-//        }.filterNot { it == currentUserId }
-//
-//        return studentRepository.findAllById(matchedStudentIds)
-//            .map { studentNameAndPhotosMapper.toDto(it) }
-//    }
+    @Transactional(readOnly = true)
+    override fun getMatchedStudents(currentUserId: Long): List<StudentNameAndPhotosDto> {
+        val matches = matchRepository.findByGiverIdOrReceiverId(currentUserId, currentUserId)
+        val matchedStudentIds = matches.flatMap {
+            listOf(it.giver.id, it.receiver.id)
+        }.filterNot { it == currentUserId }
 
-//    @Transactional(readOnly = true)
-//    override fun getStudentsByIds(studentIds: List<Long>): List<StudentNameAndPhotosDto> {
-//        return studentRepository.findAllById(studentIds)
-//            .map { student ->
-//                studentNameAndPhotosMapper.toDto(student)
-//            }
-//    }
+        return studentRepository.findAllById(matchedStudentIds)
+            .map { studentNameAndPhotosMapper.toDto(it) }
+    }
 
-//    @Transactional(readOnly = true)
-//    override fun getAllStudentsExcept(studentIds: List<Long>): List<StudentNameAndPhotosDto> {
-//        return studentRepository.findAll()
-//            .filterNot { student ->
-//                student.id in studentIds
-//            }
-//            .map { student ->
-//                studentNameAndPhotosMapper.toDto(student)
-//            }
-//    }
+    @Transactional(readOnly = true)
+    override fun getStudentsByIds(studentIds: List<Long>): List<StudentNameAndPhotosDto> {
+        return studentRepository.findAllById(studentIds)
+            .map { student ->
+                studentNameAndPhotosMapper.toDto(student)
+            }
+    }
+
+    @Transactional(readOnly = true)
+    override fun getAllStudentsExcept(studentIds: List<Long>): List<StudentNameAndPhotosDto> {
+        return studentRepository.findAll()
+            .filterNot { student -> student.id in studentIds }
+            .map { student -> studentNameAndPhotosMapper.toDto(student) }
+    }
+
 
     @Transactional
     override fun likeStudent(giverId: Long, receiverId: Long) {
