@@ -52,10 +52,7 @@ class StudentController(private val studentService: StudentService,
 
     @GetMapping("/matched")
     fun getMatchedStudents(): ResponseEntity<List<StudentNameAndPhotosDto>> {
-        val currentUser = httpSession.getAttribute("user") as? User ?:
-        return ResponseEntity(HttpStatus.UNAUTHORIZED)
-
-        val matchedStudents = studentService.getMatchedStudents(currentUser.id)
+        val matchedStudents = studentService.getMatchedStudents(currentUserId = 1)
         return ResponseEntity(matchedStudents, HttpStatus.OK)
     }
 
