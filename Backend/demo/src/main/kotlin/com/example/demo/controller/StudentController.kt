@@ -98,5 +98,4 @@ class StudentController(private val studentService: StudentService,
         val evaluations = studentService.getEvaluationsByEvaluatorId(id)
         return ResponseEntity.ok(evaluations)
     }
-
 }

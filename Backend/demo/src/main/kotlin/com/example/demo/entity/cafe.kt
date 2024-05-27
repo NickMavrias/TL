@@ -15,10 +15,7 @@ data class Cafe(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
 
-    @Column(name = "onoma", nullable = false, unique = true)
-    var onoma: String,
-
-    @Column(name = "password", nullable = false)
-    var password: String
+    @Column(name = "name", nullable = false, unique = true)
+    var cafeName: String
 )
 
