@@ -1,12 +1,9 @@
 package com.example.demo.controller
 
-import com.example.demo.dto.EvaluationsDto
-import com.example.demo.dto.ReportDto
+import com.example.demo.dto.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import com.example.demo.dto.StudentDto
-import com.example.demo.dto.StudentNameAndPhotosDto
 import com.example.demo.entity.User
 import com.example.demo.repository.FeedRepository
 import com.example.demo.service.StudentService
@@ -80,15 +77,19 @@ class StudentController(private val studentService: StudentService,
 
     @PostMapping("/{id}/unmatch")
     fun unMatchStudent(@PathVariable id: Long, httpServletRequest: HttpServletRequest): ResponseEntity<Void> {
-        val loggedInUserId = (httpServletRequest.session.getAttribute("user") as User).id
-        studentService.unMatchStudent(loggedInUserId, id)
+        studentService.unMatchStudent(1, id)
         return ResponseEntity.ok().build()
     }
 
     @PostMapping("/report")
     fun reportStudent(@RequestBody reportDto: ReportDto, httpServletRequest: HttpServletRequest): ResponseEntity<Void> {
-        val loggedInUser = httpServletRequest.session.getAttribute("user") as? User ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        studentService.reportStudent(loggedInUser.id, reportDto)
+        studentService.reportStudent(1, reportDto)
+        return ResponseEntity.ok().build()
+    }
+
+    @PostMapping("/block")
+    fun blockStudent(@RequestBody blockDto: BlockDto, httpServletRequest: HttpServletRequest): ResponseEntity<Void> {
+        studentService.blockStudent(1, blockDto)
         return ResponseEntity.ok().build()
     }
 

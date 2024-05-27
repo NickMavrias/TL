@@ -1,6 +1,7 @@
 package com.example.demo.service.impl
 
 import com.example.demo.dto.*
+import com.example.demo.entity.Block
 import org.springframework.stereotype.Service
 import com.example.demo.entity.Feed
 import com.example.demo.entity.Match
@@ -17,6 +18,7 @@ class StudentServiceImpl(
     private val matchRepository: MatchRepository,
     private val feedRepository: FeedRepository,
     private val reportRepository: ReportRepository,
+    private val blockRepository: BlockRepository,
     private val evaluateStudentRepository: EvaluateStudentRepository,
     private val evaluateCafeRepository: EvaluateCafeRepository,
     private val userMapper: UserMapper,
@@ -44,9 +46,8 @@ class StudentServiceImpl(
         return studentNameAndPhotosMapper.toDtoList(otherStudents)
     }
 
-    @Transactional(readOnly = true)
     override fun getMatchedStudents(currentUserId: Long): List<StudentNameAndPhotosDto> {
-        val matches = matchRepository.findByGiverIdOrReceiverId(currentUserId, currentUserId)
+        val matches = matchRepository.findByGiverIdOrReceiverIdAndIsMatchTrue(currentUserId)
         val matchedStudentIds = matches.flatMap {
             listOf(it.giver.id, it.receiver.id)
         }.filterNot { it == currentUserId }
@@ -177,6 +178,31 @@ class StudentServiceImpl(
             matchRepository.save(match)
         }
     }
+
+    @Transactional
+    override fun blockStudent(loggedInUserId: Long, blockDto: BlockDto) {
+        val blocker = userRepository.findById(loggedInUserId).orElseThrow { RuntimeException("Blocker not found") }
+        val blockedPerson = userRepository.findById(blockDto.blockedPersonId).orElseThrow { RuntimeException("Blocked person not found") }
+
+        // Create a new report
+        val block = Block(
+            blocker = blocker,
+            blockedPerson = blockedPerson
+        )
+        blockRepository.save(block)
+
+        // MPOROUME GIA KALUTERH APODOSH NA TSEKAROUME AN REPORTER IS STUDENT PRIN ARXISEI NA PSAXNEI
+        // OLO TO TABLE MATCH
+        // Check if a match exists between the reporter and the reported person
+        val match = matchRepository.findByGiverIdAndReceiverId(loggedInUserId, blockDto.blockedPersonId)
+            ?: matchRepository.findByGiverIdAndReceiverId(blockDto.blockedPersonId, loggedInUserId)
+
+        if (match != null) {
+            matchRepository.delete(match)
+        }
+    }
+
+
 
     @Transactional(readOnly = true)
     override fun getEvaluationsByEvaluatorId(evaluatorId: Long): EvaluationsDto {

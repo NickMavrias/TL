@@ -1,9 +1,6 @@
 package com.example.demo.service
 
-import com.example.demo.dto.EvaluationsDto
-import com.example.demo.dto.ReportDto
-import com.example.demo.dto.StudentDto
-import com.example.demo.dto.StudentNameAndPhotosDto
+import com.example.demo.dto.*
 
 interface StudentService {
     fun createStudent(studentDto: StudentDto): StudentDto
@@ -16,6 +13,7 @@ interface StudentService {
     fun getAllStudentsExcept(studentIds: List<Long>): List<StudentNameAndPhotosDto>
     fun unMatchStudent(loggedInUserId: Long, otherStudentId: Long)
     fun reportStudent(loggedInUserId: Long, reportDto: ReportDto)
+    fun blockStudent(loggedInUserId: Long, blockDto: BlockDto)
     fun getEvaluationsByEvaluatorId(evaluatorId: Long): EvaluationsDto
 }
 
