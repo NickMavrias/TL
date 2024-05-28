@@ -21,11 +21,20 @@ class _AndroidLarge16State extends State<AndroidLarge16> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Profile Management'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: _deleteProfile,
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 40),
-            _buildProfilePictureSection(),
+            SizedBox(height: 20),
+            Image.asset('assets/images/QRR.png', width: 100, height: 100),
             SizedBox(height: 20),
             _buildInterestSection(),
             SizedBox(height: 20),
@@ -87,30 +96,9 @@ class _AndroidLarge16State extends State<AndroidLarge16> {
     );
   }
 
-  Widget _buildProfilePictureSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text('Change Profile Picture',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: List.generate(
-              6,
-              (index) => GestureDetector(
-                    onTap: () => _changeProfilePicture(),
-                    child: CircleAvatar(
-                      radius: 30,
-                      backgroundImage: AssetImage(
-                          'assets/images/profile_placeholder.png'), // Example image
-                    ),
-                  )),
-        ),
-      ],
-    );
+  void _deleteProfile() {
+    // Add your deletion logic here
+    print('Profile deletion initiated.');
   }
 
   Widget _buildInterestSection() {
@@ -161,7 +149,6 @@ class _AndroidLarge16State extends State<AndroidLarge16> {
                 InterestButton(
                     interest: interest,
                     onTap: () {
-                      // Define what happens when an interest button is tapped
                       print('Interest selected: $interest');
                     }),
             ],
@@ -215,14 +202,5 @@ class _AndroidLarge16State extends State<AndroidLarge16> {
         ),
       ],
     );
-  }
-
-  void _changeProfilePicture() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      print('Image selected: ${pickedFile.path}');
-    } else {
-      print('No image selected.');
-    }
   }
 }
