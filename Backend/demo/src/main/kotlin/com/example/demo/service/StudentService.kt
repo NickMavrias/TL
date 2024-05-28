@@ -14,6 +14,5 @@ interface StudentService {
     fun unMatchStudent(loggedInUserId: Long, otherStudentId: Long)
     fun reportStudent(loggedInUserId: Long, reportDto: ReportDto)
     fun blockStudent(loggedInUserId: Long, blockDto: BlockDto)
-    fun getEvaluationsByEvaluatorId(evaluatorId: Long): EvaluationsDto
 }
 

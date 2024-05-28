@@ -92,10 +92,4 @@ class StudentController(private val studentService: StudentService,
         studentService.blockStudent(1, blockDto)
         return ResponseEntity.ok().build()
     }
-
-    @GetMapping("/evaluator/{id}")
-    fun getEvaluationsByEvaluatorId(@PathVariable id: Long): ResponseEntity<EvaluationsDto> {
-        val evaluations = studentService.getEvaluationsByEvaluatorId(id)
-        return ResponseEntity.ok(evaluations)
-    }
 }

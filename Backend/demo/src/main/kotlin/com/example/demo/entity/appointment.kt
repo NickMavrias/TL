@@ -23,5 +23,11 @@ data class Appointment(
     var cafe: Cafe,
 
     @Column(name = "appointment_date", nullable = false)
-    var appointmentDate: LocalDateTime
+    var appointmentDate: LocalDateTime,
+
+    @Column(name = "is_evaluated_student", nullable = false)
+    var isEvaluatedStudent: Boolean = false,
+
+    @Column(name = "is_evaluated_cafe", nullable = false)
+    var isEvaluatedCafe: Boolean = false
 )

@@ -24,7 +24,6 @@ class StudentServiceImpl(
     private val userMapper: UserMapper,
     private val studentMapper: StudentMapper,
     private val evaluateCafeMapper: EvaluateCafeMapper,
-    private val evaluateStudentMapper: EvaluateStudentMapper,
     private val studentNameAndPhotosMapper: StudentNameAndPhotosMapper
 ) : StudentService {
 
@@ -83,7 +82,8 @@ class StudentServiceImpl(
         } else {
             val newMatch = Match(
                 giver = studentRepository.findById(giverId).orElseThrow { RuntimeException("Giver not found") },
-                receiver = studentRepository.findById(receiverId).orElseThrow { RuntimeException("Receiver not found") },
+                receiver = studentRepository.findById(receiverId)
+                    .orElseThrow { RuntimeException("Receiver not found") },
                 isMatch = false
             )
             matchRepository.save(newMatch)
@@ -97,7 +97,8 @@ class StudentServiceImpl(
         } else {
             val newFeed = Feed(
                 giver = studentRepository.findById(giverId).orElseThrow { RuntimeException("Giver not found") },
-                receiver = studentRepository.findById(receiverId).orElseThrow { RuntimeException("Receiver not found") },
+                receiver = studentRepository.findById(receiverId)
+                    .orElseThrow { RuntimeException("Receiver not found") },
                 weight = true
             )
             feedRepository.save(newFeed)
@@ -115,7 +116,8 @@ class StudentServiceImpl(
         } else {
             val newFeed = Feed(
                 giver = studentRepository.findById(giverId).orElseThrow { RuntimeException("Giver not found") },
-                receiver = studentRepository.findById(receiverId).orElseThrow { RuntimeException("Receiver not found") },
+                receiver = studentRepository.findById(receiverId)
+                    .orElseThrow { RuntimeException("Receiver not found") },
                 weight = false
             )
             feedRepository.save(newFeed)
@@ -157,7 +159,8 @@ class StudentServiceImpl(
     @Transactional
     override fun reportStudent(loggedInUserId: Long, reportDto: ReportDto) {
         val reporter = userRepository.findById(loggedInUserId).orElseThrow { RuntimeException("Reporter not found") }
-        val reportedPerson = userRepository.findById(reportDto.reportedPersonId).orElseThrow { RuntimeException("Reported person not found") }
+        val reportedPerson = userRepository.findById(reportDto.reportedPersonId)
+            .orElseThrow { RuntimeException("Reported person not found") }
 
         // Create a new report
         val report = Report(
@@ -182,7 +185,8 @@ class StudentServiceImpl(
     @Transactional
     override fun blockStudent(loggedInUserId: Long, blockDto: BlockDto) {
         val blocker = userRepository.findById(loggedInUserId).orElseThrow { RuntimeException("Blocker not found") }
-        val blockedPerson = userRepository.findById(blockDto.blockedPersonId).orElseThrow { RuntimeException("Blocked person not found") }
+        val blockedPerson = userRepository.findById(blockDto.blockedPersonId)
+            .orElseThrow { RuntimeException("Blocked person not found") }
 
         // Create a new report
         val block = Block(
@@ -200,16 +204,5 @@ class StudentServiceImpl(
         if (match != null) {
             matchRepository.delete(match)
         }
-    }
-
-
-
-    @Transactional(readOnly = true)
-    override fun getEvaluationsByEvaluatorId(evaluatorId: Long): EvaluationsDto {
-        val cafeEvaluations = evaluateCafeRepository.findByEvaluatorId(evaluatorId)
-            .map { evaluateCafeMapper.toDto(it) }
-        val studentEvaluations = evaluateStudentRepository.findByEvaluatorId(evaluatorId)
-            .map { evaluateStudentMapper.toDto(it) }
-        return EvaluationsDto(studentEvaluations, cafeEvaluations)
     }
 }

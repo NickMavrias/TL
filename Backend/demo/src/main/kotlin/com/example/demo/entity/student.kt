@@ -26,7 +26,7 @@ data class Student(
     var email: String,
 
     @Column(name = "phone", nullable = false)
-    var phone: Int,
+    var phone: String,
 
     @Column(name = "fullname", nullable = false)
     var fullname: String,

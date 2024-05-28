@@ -41,7 +41,7 @@ class _AndroidLarge14State extends State<AndroidLarge14> {
   Future<void> fetchFriends() async {
     try {
       final response = await http
-          .get(Uri.parse('http://192.168.1.8:8080/api/students/matched'));
+          .get(Uri.parse('http://192.168.1.6:8080/api/students/matched'));
 
       if (response.statusCode == 200) {
         // Log the response body
@@ -94,7 +94,7 @@ class _AndroidLarge14State extends State<AndroidLarge14> {
   }
 
   Future<void> unMatchStudent(int id) async {
-    final url = Uri.parse('http://192.168.1.8:8080/api/students/$id/unmatch');
+    final url = Uri.parse('http://192.168.1.6:8080/api/students/$id/unmatch');
     try {
       final response = await http.post(url);
       if (response.statusCode == 200) {
@@ -113,7 +113,7 @@ class _AndroidLarge14State extends State<AndroidLarge14> {
   }
 
   Future<void> reportStudent(int reportedPersonId, String context) async {
-    final url = Uri.parse('http://192.168.1.8:8080/api/students/report');
+    final url = Uri.parse('http://192.168.1.6:8080/api/students/report');
     final reportDto =
         ReportDto(reportedPersonId: reportedPersonId, context: context);
     try {
@@ -138,7 +138,7 @@ class _AndroidLarge14State extends State<AndroidLarge14> {
   }
 
   Future<void> blockStudent(int blockedPersonId) async {
-    final url = Uri.parse('http://192.168.1.8:8080/api/students/block');
+    final url = Uri.parse('http://192.168.1.6:8080/api/students/block');
     final blockDto = BlockDto(blockedPersonId: blockedPersonId);
     try {
       final response = await http.post(

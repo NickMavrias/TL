@@ -8,7 +8,7 @@ import jakarta.persistence.*
 data class EvaluateStudent(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long? = null, // Make id nullable with a default value
 
     @ManyToOne
     @JoinColumn(name = "evaluator_id", nullable = false)
@@ -19,17 +19,17 @@ data class EvaluateStudent(
     val evaluatedPerson: Student,
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    val communication: Stars,
+    val communication: Int,
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    val trueIrl: Stars,
+    val trueIrl: Int,
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    val overall: Stars,
+    val overall: Int,
 
     @Column(nullable = false, columnDefinition = "TEXT")
-    val context: String
+    val context: String,
+
+    @Column(nullable = false)
+    var isEvaluated: Boolean = false
 )

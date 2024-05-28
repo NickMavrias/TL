@@ -1,6 +1,5 @@
 package com.example.demo.entity
 
-import com.example.demo.dto.Stars
 import jakarta.persistence.*
 
 @Entity
@@ -8,7 +7,7 @@ import jakarta.persistence.*
 data class EvaluateCafe(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long = 0,
 
     @ManyToOne
     @JoinColumn(name = "evaluator_id", nullable = false)
@@ -19,17 +18,17 @@ data class EvaluateCafe(
     val evaluatedCafe: Cafe,
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    val silence: Stars,
+    val silence: Int,
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    val vibe: Stars,
+    val vibe: Int,
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    val appointmentEval: Stars,
+    val appointmentEval: Int,
 
     @Column(nullable = false, columnDefinition = "TEXT")
-    val context: String
+    val context: String,
+
+    @Column(nullable = false)
+    var isEvaluated: Boolean = false
 )

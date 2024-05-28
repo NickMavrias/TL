@@ -33,7 +33,7 @@ class AndroidLarge6 extends StatelessWidget {
     }
 
     final url = Uri.parse(
-        'http://192.168.1.8:8080/api/users/login'); // vazoyme tin ip-v4 mas
+        'http://192.168.1.6:8080/api/users/login'); // vazoyme tin ip-v4 mas
     try {
       final response = await http.post(
         url,

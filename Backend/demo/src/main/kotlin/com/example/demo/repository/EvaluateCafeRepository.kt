@@ -2,9 +2,7 @@ package com.example.demo.repository
 
 import com.example.demo.entity.EvaluateCafe
 import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.stereotype.Repository
 
-@Repository
 interface EvaluateCafeRepository : JpaRepository<EvaluateCafe, Long> {
-    fun findByEvaluatorId(evaluatorId: Long): List<EvaluateCafe>
+    fun findByEvaluatorIdAndEvaluatedCafeId(evaluatorId: Long, evaluatedCafeId: Long): EvaluateCafe?
 }

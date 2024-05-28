@@ -1,12 +1,9 @@
 package com.example.demo.dto
 
-import com.example.demo.entity.Student
-
 data class EvaluateStudentDto(
-    val evaluator: Student,
-    val evaluatedPerson: Student,
-    val communication: Stars,
-    val trueIrl: Stars,
-    val overall: Stars,
+    val evaluatedPersonId: Long,
+    val communication: Int,
+    val trueIrl: Int,
+    val overall: Int,
     val context: String
 )
