@@ -15,4 +15,3 @@ interface StudentService {
     fun reportStudent(loggedInUserId: Long, reportDto: ReportDto)
     fun blockStudent(loggedInUserId: Long, blockDto: BlockDto)
 }
-

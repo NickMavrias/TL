@@ -1,12 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart'; // Import flutter_svg
-import 'android_large13.dart'; // Make sure to import AndroidLarge13
 import 'package:swipe_cards/swipe_cards.dart';
 import 'dart:async'; // For Timer
 import 'dart:ui' as ui; // Import for ImageFilter
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+import 'android_large13.dart'; // Make sure to import AndroidLarge13
 import 'android_large14.dart';
 import 'android_large15.dart';
 import 'android_large16.dart';
+
+// Data model for User
+class User {
+  final int id;
+  final String fullname;
+  final int age;
+
+  User({required this.id, required this.fullname, required this.age});
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      id: json['id'],
+      fullname: json['fullname'],
+      age: json['age'],
+    );
+  }
+}
 
 class AndroidLarge11 extends StatefulWidget {
   final bool blurBackground;
@@ -29,45 +49,58 @@ class _AndroidLarge11State extends State<AndroidLarge11> {
   @override
   void initState() {
     super.initState();
-    swipeItems = [
-      SwipeItem(
-        content: Content(
-          imagePath: 'assets/images/user1.png',
-          name: 'Νίκος',
-          age: 22,
-          location: 'Πάτρα',
-          distance: 1.0,
-        ),
-        likeAction: () => print("Liked N"),
-        nopeAction: () => print("Disliked N"),
-        superlikeAction: () => print("Superliked N"),
-      ),
-      SwipeItem(
-        content: Content(
-          imagePath: 'assets/images/user2.png',
-          name: 'Γιώργος',
-          age: 22,
-          location: 'Πάτρα',
-          distance: 3.2,
-        ),
-        likeAction: () => print("Liked G"),
-        nopeAction: () => print("Disliked G"),
-        superlikeAction: () => print("Superliked G"),
-      ),
-      SwipeItem(
-        content: Content(
-          imagePath: 'assets/images/user3.png',
-          name: 'Γιώργος',
-          age: 22,
-          location: 'Φλώρινα',
-          distance: 0.2,
-        ),
-        likeAction: () => print("Liked G"),
-        nopeAction: () => print("Disliked G"),
-        superlikeAction: () => print("Superliked G"),
-      ),
-    ];
+    fetchUsers(); // Fetch users when the widget initializes
     matchEngine = MatchEngine(swipeItems: swipeItems);
+  }
+
+  Future<void> fetchUsers() async {
+    try {
+      final response = await http
+          .get(Uri.parse('http://192.168.1.6:8080/api/students/other'));
+      if (response.statusCode == 200) {
+        List<dynamic> data = json.decode(response.body);
+        setState(() {
+          swipeItems = data.map((userJson) {
+            User user = User.fromJson(userJson);
+            return SwipeItem(
+              content: Content(
+                imagePath: 'assets/images/user1.png', // Placeholder image path
+                name: user.fullname,
+                age: user.age,
+                location: 'Unknown', // You can add location if available
+                distance: 0.0, // You can calculate or add distance if available
+              ),
+              likeAction: () {
+                print("Liked ${user.fullname}");
+                likeStudent(user.id); // Call the API when swiped right
+              },
+              nopeAction: () => print("Disliked ${user.fullname}"),
+              superlikeAction: () => print("Superliked ${user.fullname}"),
+            );
+          }).toList();
+          matchEngine = MatchEngine(swipeItems: swipeItems);
+        });
+      } else {
+        print('Failed to load users');
+      }
+    } catch (e) {
+      print('Error fetching users: $e');
+    }
+  }
+
+  Future<void> likeStudent(int studentId) async {
+    final url =
+        Uri.parse('http://192.168.1.6:8080/api/students/$studentId/like');
+    try {
+      final response = await http.post(url);
+      if (response.statusCode == 200) {
+        print('Liked student $studentId');
+      } else {
+        print('Failed to like student $studentId');
+      }
+    } catch (e) {
+      print('Error liking student $studentId: $e');
+    }
   }
 
   @override
@@ -138,7 +171,8 @@ class _AndroidLarge11State extends State<AndroidLarge11> {
               ),
             ],
           ),
-          if (widget.blurBackground) // Conditional blur overlay with Pomodoro and Hydration timer
+          if (widget
+              .blurBackground) // Conditional blur overlay with Pomodoro and Hydration timer
             Positioned.fill(
               child: GestureDetector(
                 onTap: () {}, // Prevents tap through
@@ -177,7 +211,8 @@ class _AndroidLarge11State extends State<AndroidLarge11> {
                             onPressed: startPomodoroTimer,
                             child: Text('Start Pomodoro'),
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.orange, // Orange color for the Pomodoro button
+                              backgroundColor: Colors
+                                  .orange, // Orange color for the Pomodoro button
                             ),
                           ),
                           SizedBox(height: 20),
@@ -194,7 +229,8 @@ class _AndroidLarge11State extends State<AndroidLarge11> {
                             onPressed: startHydrationTimer,
                             child: Text('Start Hydration Timer'),
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.lightBlue, // Light Blue color for the Hydration button
+                              backgroundColor: Colors
+                                  .lightBlue, // Light Blue color for the Hydration button
                             ),
                           ),
                           SizedBox(height: 20),
@@ -222,12 +258,11 @@ class _AndroidLarge11State extends State<AndroidLarge11> {
           setState(() {
             _currentIndex = index;
           });
-          if (index == 0){
+          if (index == 0) {
             Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => AndroidLarge11()),
             );
-          }
-          else if (index == 1) { // If second icon is tapped
+          } else if (index == 1) {
             Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => AndroidLarge13()),
             );
@@ -235,12 +270,11 @@ class _AndroidLarge11State extends State<AndroidLarge11> {
             Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => AndroidLarge14()),
             );
-          }
-          else if (index == 3){
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => AndroidLarge15()));  // Navigate to AndroidLarge15
-            }
-            else if (index == 4){
+          } else if (index == 3) {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => AndroidLarge15()),
+            );
+          } else if (index == 4) {
             Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => AndroidLarge16()),
             );
@@ -312,7 +346,11 @@ class UserCard extends StatelessWidget {
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [Colors.transparent, Color(0x60616161), Color(0xFF0A0A0A)],
+                  colors: [
+                    Colors.transparent,
+                    Color(0x60616161),
+                    Color(0xFF0A0A0A)
+                  ],
                 ),
               ),
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -320,9 +358,15 @@ class UserCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('${content.name}, ${content.age}', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white)),
-                    Text('Ζει στην ${content.location}', style: TextStyle(color: Colors.white, fontSize: 16)),
-                    Text('${content.distance} km μακριά', style: TextStyle(color: Colors.white, fontSize: 16)),
+                    Text('${content.name}, ${content.age}',
+                        style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white)),
+                    Text('Ζει στην ${content.location}',
+                        style: TextStyle(color: Colors.white, fontSize: 16)),
+                    Text('${content.distance} km μακριά',
+                        style: TextStyle(color: Colors.white, fontSize: 16)),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -358,5 +402,10 @@ class Content {
   final String location;
   final double distance;
 
-  Content({required this.imagePath, required this.name, required this.age, required this.location, required this.distance});
+  Content(
+      {required this.imagePath,
+      required this.name,
+      required this.age,
+      required this.location,
+      required this.distance});
 }

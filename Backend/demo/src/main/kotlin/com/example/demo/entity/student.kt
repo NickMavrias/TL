@@ -17,7 +17,6 @@ enum class Interests {
 @Entity
 @Table(name = "students")
 data class Student(
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
@@ -32,7 +31,7 @@ data class Student(
     var fullname: String,
 
     @Column(name = "birthday", nullable = false)
-    var birthday: String,  // Changed from val to var
+    var birthday: String,  // Ensure this field is present
 
     @Column(name = "gender", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -52,3 +51,4 @@ data class Student(
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     var user: User
 )
+

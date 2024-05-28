@@ -10,6 +10,9 @@ import com.example.demo.mapper.*
 import com.example.demo.repository.*
 import com.example.demo.service.StudentService
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
 
 @Service
 class StudentServiceImpl(
@@ -24,7 +27,6 @@ class StudentServiceImpl(
     private val userMapper: UserMapper,
     private val studentMapper: StudentMapper,
     private val evaluateCafeMapper: EvaluateCafeMapper,
-    private val studentNameAndPhotosMapper: StudentNameAndPhotosMapper
 ) : StudentService {
 
     @Transactional
@@ -42,7 +44,13 @@ class StudentServiceImpl(
     override fun getOtherStudents(currentUserId: Long): List<StudentNameAndPhotosDto> {
         val allStudents = studentRepository.findAll()
         val otherStudents = allStudents.filter { it.user.id != currentUserId }
-        return studentNameAndPhotosMapper.toDtoList(otherStudents)
+        return otherStudents.map { student ->
+            StudentNameAndPhotosDto(
+                id = student.id,
+                fullname = student.fullname,
+                age = calculateAge(student.birthday)
+            )
+        }
     }
 
     override fun getMatchedStudents(currentUserId: Long): List<StudentNameAndPhotosDto> {
@@ -51,25 +59,36 @@ class StudentServiceImpl(
             listOf(it.giver.id, it.receiver.id)
         }.filterNot { it == currentUserId }
 
-        return studentRepository.findAllById(matchedStudentIds)
-            .map { studentNameAndPhotosMapper.toDto(it) }
+        return studentRepository.findAllById(matchedStudentIds).map { student ->
+            StudentNameAndPhotosDto(
+                id = student.id,
+                fullname = student.fullname,
+                age = calculateAge(student.birthday)
+            )
+        }
     }
 
     @Transactional(readOnly = true)
     override fun getStudentsByIds(studentIds: List<Long>): List<StudentNameAndPhotosDto> {
-        return studentRepository.findAllById(studentIds)
-            .map { student ->
-                studentNameAndPhotosMapper.toDto(student)
-            }
+        return studentRepository.findAllById(studentIds).map { student ->
+            StudentNameAndPhotosDto(
+                id = student.id,
+                fullname = student.fullname,
+                age = calculateAge(student.birthday)
+            )
+        }
     }
 
     @Transactional(readOnly = true)
     override fun getAllStudentsExcept(studentIds: List<Long>): List<StudentNameAndPhotosDto> {
-        return studentRepository.findAll()
-            .filterNot { student -> student.id in studentIds }
-            .map { student -> studentNameAndPhotosMapper.toDto(student) }
+        return studentRepository.findAll().filterNot { student -> student.id in studentIds }.map { student ->
+            StudentNameAndPhotosDto(
+                id = student.id,
+                fullname = student.fullname,
+                age = calculateAge(student.birthday)
+            )
+        }
     }
-
 
     @Transactional
     override fun likeStudent(giverId: Long, receiverId: Long) {
@@ -82,8 +101,7 @@ class StudentServiceImpl(
         } else {
             val newMatch = Match(
                 giver = studentRepository.findById(giverId).orElseThrow { RuntimeException("Giver not found") },
-                receiver = studentRepository.findById(receiverId)
-                    .orElseThrow { RuntimeException("Receiver not found") },
+                receiver = studentRepository.findById(receiverId).orElseThrow { RuntimeException("Receiver not found") },
                 isMatch = false
             )
             matchRepository.save(newMatch)
@@ -97,8 +115,7 @@ class StudentServiceImpl(
         } else {
             val newFeed = Feed(
                 giver = studentRepository.findById(giverId).orElseThrow { RuntimeException("Giver not found") },
-                receiver = studentRepository.findById(receiverId)
-                    .orElseThrow { RuntimeException("Receiver not found") },
+                receiver = studentRepository.findById(receiverId).orElseThrow { RuntimeException("Receiver not found") },
                 weight = true
             )
             feedRepository.save(newFeed)
@@ -116,8 +133,7 @@ class StudentServiceImpl(
         } else {
             val newFeed = Feed(
                 giver = studentRepository.findById(giverId).orElseThrow { RuntimeException("Giver not found") },
-                receiver = studentRepository.findById(receiverId)
-                    .orElseThrow { RuntimeException("Receiver not found") },
+                receiver = studentRepository.findById(receiverId).orElseThrow { RuntimeException("Receiver not found") },
                 weight = false
             )
             feedRepository.save(newFeed)
@@ -135,8 +151,7 @@ class StudentServiceImpl(
         } else {
             val newMatch = Match(
                 giver = studentRepository.findById(giverId).orElseThrow { RuntimeException("Giver not found") },
-                receiver = studentRepository.findById(receiverId)
-                    .orElseThrow { RuntimeException("Receiver not found") },
+                receiver = studentRepository.findById(receiverId).orElseThrow { RuntimeException("Receiver not found") },
                 isMatch = true
             )
             matchRepository.save(newMatch)
@@ -159,8 +174,7 @@ class StudentServiceImpl(
     @Transactional
     override fun reportStudent(loggedInUserId: Long, reportDto: ReportDto) {
         val reporter = userRepository.findById(loggedInUserId).orElseThrow { RuntimeException("Reporter not found") }
-        val reportedPerson = userRepository.findById(reportDto.reportedPersonId)
-            .orElseThrow { RuntimeException("Reported person not found") }
+        val reportedPerson = userRepository.findById(reportDto.reportedPersonId).orElseThrow { RuntimeException("Reported person not found") }
 
         // Create a new report
         val report = Report(
@@ -185,8 +199,7 @@ class StudentServiceImpl(
     @Transactional
     override fun blockStudent(loggedInUserId: Long, blockDto: BlockDto) {
         val blocker = userRepository.findById(loggedInUserId).orElseThrow { RuntimeException("Blocker not found") }
-        val blockedPerson = userRepository.findById(blockDto.blockedPersonId)
-            .orElseThrow { RuntimeException("Blocked person not found") }
+        val blockedPerson = userRepository.findById(blockDto.blockedPersonId).orElseThrow { RuntimeException("Blocked person not found") }
 
         // Create a new report
         val block = Block(
@@ -204,5 +217,11 @@ class StudentServiceImpl(
         if (match != null) {
             matchRepository.delete(match)
         }
+    }
+
+    private fun calculateAge(birthday: String): Int {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val birthDate = LocalDate.parse(birthday, formatter)
+        return Period.between(birthDate, LocalDate.now()).years
     }
 }

@@ -13,4 +13,6 @@ interface MatchRepository : JpaRepository<Match, Long> {
     fun findMatchedByGiverId(giverId: Long): List<Match>
     @Query("SELECT m FROM Match m WHERE (m.giver.id = 1) AND m.isMatch = true")
     fun findByGiverIdOrReceiverIdAndIsMatchTrue(@Param("userId") userId: Long): List<Match>
+    @Query("SELECT m.receiver.id FROM Match m WHERE m.giver.id = :userId AND m.isMatch = true")
+    fun findLikedStudentIds(@Param("userId") userId: Long): List<Long>
 }
