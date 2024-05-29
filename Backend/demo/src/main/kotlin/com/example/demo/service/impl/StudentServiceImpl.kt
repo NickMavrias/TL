@@ -43,7 +43,26 @@ class StudentServiceImpl(
     @Transactional(readOnly = true)
     override fun getOtherStudents(currentUserId: Long): List<StudentNameAndPhotosDto> {
         val allStudents = studentRepository.findAll()
-        val otherStudents = allStudents.filter { it.user.id != currentUserId }
+        val excludedStudentIds = mutableSetOf<Long>()
+
+        // Fetch IDs of students with positive interactions, excluding the hardcoded user's ID
+        val interactedStudentIds = feedRepository.findPositiveInteractedStudentIds(currentUserId)
+        excludedStudentIds.addAll(interactedStudentIds)
+
+        // Fetch IDs of students already liked by the hardcoded user
+        val likedStudentIds = matchRepository.findLikedStudentIds(currentUserId)
+        excludedStudentIds.addAll(likedStudentIds)
+
+        // Fetch IDs of students that have a feed row with giver_id = 1
+        val feedReceiverIds = feedRepository.findAllReceiverIdsByGiverId(currentUserId)
+        excludedStudentIds.addAll(feedReceiverIds)
+
+        // Explicitly add hardcoded user's ID to ensure exclusion
+        excludedStudentIds.add(currentUserId)
+
+        // Exclude these IDs from the full list to get 'other' students
+        val otherStudents = allStudents.filterNot { it.id in excludedStudentIds }
+
         return otherStudents.map { student ->
             StudentNameAndPhotosDto(
                 id = student.id,

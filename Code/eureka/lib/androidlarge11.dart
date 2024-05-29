@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart'; // Import flutter_svg
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:swipe_cards/swipe_cards.dart';
-import 'dart:async'; // For Timer
-import 'dart:ui' as ui; // Import for ImageFilter
+import 'dart:async';
+import 'dart:ui' as ui;
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import 'android_large13.dart'; // Make sure to import AndroidLarge13
+import 'android_large13.dart';
 import 'android_large14.dart';
 import 'android_large15.dart';
 import 'android_large16.dart';
@@ -56,7 +56,7 @@ class _AndroidLarge11State extends State<AndroidLarge11> {
   Future<void> fetchUsers() async {
     try {
       final response = await http
-          .get(Uri.parse('http://192.168.1.6:8080/api/students/other'));
+          .get(Uri.parse('http://192.168.2.2:8080/api/students/other'));
       if (response.statusCode == 200) {
         List<dynamic> data = json.decode(response.body);
         setState(() {
@@ -74,8 +74,14 @@ class _AndroidLarge11State extends State<AndroidLarge11> {
                 print("Liked ${user.fullname}");
                 likeStudent(user.id); // Call the API when swiped right
               },
-              nopeAction: () => print("Disliked ${user.fullname}"),
-              superlikeAction: () => print("Superliked ${user.fullname}"),
+              nopeAction: () {
+                print("Disliked ${user.fullname}");
+                dislikeStudent(user.id); // Call the API when swiped left
+              },
+              superlikeAction: () {
+                print("Superliked ${user.fullname}");
+                superLikeStudent(user.id); // Call the API when swiped up
+              },
             );
           }).toList();
           matchEngine = MatchEngine(swipeItems: swipeItems);
@@ -90,7 +96,7 @@ class _AndroidLarge11State extends State<AndroidLarge11> {
 
   Future<void> likeStudent(int studentId) async {
     final url =
-        Uri.parse('http://192.168.1.6:8080/api/students/$studentId/like');
+        Uri.parse('http://192.168.2.2:8080/api/students/$studentId/like');
     try {
       final response = await http.post(url);
       if (response.statusCode == 200) {
@@ -100,6 +106,36 @@ class _AndroidLarge11State extends State<AndroidLarge11> {
       }
     } catch (e) {
       print('Error liking student $studentId: $e');
+    }
+  }
+
+  Future<void> dislikeStudent(int studentId) async {
+    final url =
+        Uri.parse('http://192.168.2.2:8080/api/students/$studentId/dislike');
+    try {
+      final response = await http.post(url);
+      if (response.statusCode == 200) {
+        print('Disliked student $studentId');
+      } else {
+        print('Failed to dislike student $studentId');
+      }
+    } catch (e) {
+      print('Error disliking student $studentId: $e');
+    }
+  }
+
+  Future<void> superLikeStudent(int studentId) async {
+    final url =
+        Uri.parse('http://192.168.2.2:8080/api/students/$studentId/superLike');
+    try {
+      final response = await http.post(url);
+      if (response.statusCode == 200) {
+        print('Superliked student $studentId');
+      } else {
+        print('Failed to superlike student $studentId');
+      }
+    } catch (e) {
+      print('Error superliking student $studentId: $e');
     }
   }
 
@@ -167,6 +203,10 @@ class _AndroidLarge11State extends State<AndroidLarge11> {
                     return UserCard(content: item);
                   },
                   onStackFinished: () => print("Stack Finished"),
+                  itemChanged: (SwipeItem item, int index) {
+                    print("Item changed: $index");
+                  },
+                  upSwipeAllowed: true, // Enable up swipe
                 ),
               ),
             ],

@@ -25,38 +25,8 @@ class StudentController(
     @GetMapping("/other")
     fun getOtherStudents(): ResponseEntity<List<StudentNameAndPhotosDto>> {
         val hardcodedUserId = 1L // Hardcoded student ID
-
-        // Fetch IDs of students with positive interactions, excluding the hardcoded user's ID
-        val interactedStudentIds = feedRepository.findPositiveInteractedStudentIds(hardcodedUserId).toMutableList()
-
-        // Fetch IDs of students already liked by the hardcoded user
-        val likedStudentIds = matchRepository.findLikedStudentIds(hardcodedUserId)
-
-        // Combine interacted and liked IDs
-        val excludedStudentIds = (interactedStudentIds + likedStudentIds).toMutableSet()
-
-        // Explicitly add hardcoded user's ID to ensure exclusion
-        excludedStudentIds.add(hardcodedUserId)
-
-        // Get students with positive interactions (not including the hardcoded user)
-        val interactedStudents = studentService.getStudentsByIds(interactedStudentIds)
-
-        // Exclude these IDs from the full list to get 'other' students
-        val otherStudents = studentService.getAllStudentsExcept(excludedStudentIds.toList())
-
-        // Combine and filter out the hardcoded user just to be doubly sure
-        val allStudents = (interactedStudents + otherStudents).filterNot { it.id == hardcodedUserId }
-
-        // Directly map to DTO
-        val allStudentsWithAge = allStudents.map { student ->
-            StudentNameAndPhotosDto(
-                id = student.id,
-                fullname = student.fullname,
-                age = student.age // Ensure that age calculation logic is integrated in the service layer
-            )
-        }
-
-        return ResponseEntity(allStudentsWithAge, HttpStatus.OK)
+        val otherStudents = studentService.getOtherStudents(hardcodedUserId)
+        return ResponseEntity(otherStudents, HttpStatus.OK)
     }
 
 
