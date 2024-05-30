@@ -1,11 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:your_app_name/androidlarge11.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'androidlarge11.dart';
 import 'android_large15.dart';
 import 'android_large16.dart';
-import 'androidlarge11.dart';
 import 'android_large14.dart';
+
+// Model class for student data
+class Student {
+  final int id;
+  final String fullname;
+  final String age;
+  final String photoUrl;
+
+  Student({
+    required this.id,
+    required this.fullname,
+    required this.age,
+    required this.photoUrl,
+  });
+
+  factory Student.fromJson(Map<String, dynamic> json) {
+    return Student(
+      id: json['id'],
+      fullname: json['fullname'],
+      age: json['age'],
+      photoUrl: json['photoUrl'],
+    );
+  }
+}
+
+// Fetch data from the API
+Future<List<Student>> fetchMatchedStudents() async {
+  final response =
+      await http.get(Uri.parse('http://192.168.2.2/api/students/matched'));
+
+  if (response.statusCode == 200) {
+    List<dynamic> data = json.decode(response.body);
+    return data.map((json) => Student.fromJson(json)).toList();
+  } else {
+    throw Exception('Failed to load students');
+  }
+}
 
 class AndroidLarge13 extends StatefulWidget {
   @override
@@ -14,6 +52,13 @@ class AndroidLarge13 extends StatefulWidget {
 
 class _AndroidLarge13State extends State<AndroidLarge13> {
   int _currentIndex = 0;
+  late Future<List<Student>> _futureStudents;
+
+  @override
+  void initState() {
+    super.initState();
+    _futureStudents = fetchMatchedStudents();
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -27,13 +72,10 @@ class _AndroidLarge13State extends State<AndroidLarge13> {
   }
 
   void handleAction(String value, int index) {
-    // Example of how to handle actions. Implement according to your needs.
     if (value == 'Unmatch') {
       print('Unmatched User $index');
-      // Implement your unmatch functionality here.
     } else if (value == 'Report') {
       print('Reported User $index');
-      // Implement your report functionality here.
     }
   }
 
@@ -53,38 +95,53 @@ class _AndroidLarge13State extends State<AndroidLarge13> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: 2,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/user${index + 1}.png'),
-                  ),
-                  title: Text('User $index'),
-                  subtitle: Text('Συνομιλήστε τώρα!'),
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => ChatScreen(name: 'User $index'),
-                      ),
-                    );
-                  },
-                  trailing: PopupMenuButton<String>(
-                    onSelected: (String result) {
-                      handleAction(result, index);
+            child: FutureBuilder<List<Student>>(
+              future: _futureStudents,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else {
+                  final students = snapshot.data!;
+                  return ListView.builder(
+                    itemCount: students.length,
+                    itemBuilder: (context, index) {
+                      final student = students[index];
+                      return ListTile(
+                        leading: CircleAvatar(
+                          backgroundImage: NetworkImage(student.photoUrl),
+                        ),
+                        title: Text(student.fullname),
+                        subtitle: Text('Συνομιλήστε τώρα!'),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  ChatScreen(name: student.fullname),
+                            ),
+                          );
+                        },
+                        trailing: PopupMenuButton<String>(
+                          onSelected: (String result) {
+                            handleAction(result, index);
+                          },
+                          itemBuilder: (BuildContext context) =>
+                              <PopupMenuEntry<String>>[
+                            const PopupMenuItem<String>(
+                              value: 'Unmatch',
+                              child: Text('Unmatch'),
+                            ),
+                            const PopupMenuItem<String>(
+                              value: 'Report',
+                              child: Text('Αναφορά'),
+                            ),
+                          ],
+                        ),
+                      );
                     },
-                    itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                      const PopupMenuItem<String>(
-                        value: 'Unmatch',
-                        child: Text('Unmatch'),
-                      ),
-                      const PopupMenuItem<String>(
-                        value: 'Report',
-                        child: Text('Αναφορά'),
-                      ),
-                    ],
-                  ),
-                );
+                  );
+                }
               },
             ),
           ),
@@ -95,22 +152,23 @@ class _AndroidLarge13State extends State<AndroidLarge13> {
         onTap: (index) {
           setState(() {
             _currentIndex = index;
-            if (index == 0){
+            if (index == 0) {
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => AndroidLarge11()),
               );
-            } else if (index == 1){
+            } else if (index == 1) {
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => AndroidLarge13()),
               );
-            } else if (index == 2){
+            } else if (index == 2) {
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => AndroidLarge14()),
               );
-            } else if (index == 3){
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => AndroidLarge15()));  // Navigate to AndroidLarge15
-              } else if (index == 4){
+            } else if (index == 3) {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) =>
+                      AndroidLarge15())); // Navigate to AndroidLarge15
+            } else if (index == 4) {
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => AndroidLarge16()),
               );
@@ -166,7 +224,8 @@ class ChatScreen extends StatelessWidget {
                 children: [
                   CircularProgressIndicator(),
                   SizedBox(width: 30),
-                  Text("Περιμένουμε επιβεβαίωση \n από το καφέ και το εύρημα.."),
+                  Text(
+                      "Περιμένουμε επιβεβαίωση \n από το καφέ και το εύρημα.."),
                 ],
               ),
             ),
@@ -177,7 +236,8 @@ class ChatScreen extends StatelessWidget {
       Future.delayed(Duration(seconds: 5), () {
         if (Navigator.of(context).canPop()) Navigator.of(context).pop();
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => AndroidLarge11(blurBackground: true)),
+          MaterialPageRoute(
+              builder: (context) => AndroidLarge11(blurBackground: true)),
         );
       });
     }
@@ -187,7 +247,7 @@ class ChatScreen extends StatelessWidget {
       DateTime selectedDate = DateTime.now();
       TimeOfDay selectedTime = TimeOfDay.now();
 
-    ThemeData orangeTheme = ThemeData(
+      ThemeData orangeTheme = ThemeData(
         primaryColor: Colors.orange[900], // Using the orange 900 shade
         colorScheme: ColorScheme.light(
           primary: Colors.orange[900]!,
@@ -204,70 +264,73 @@ class ChatScreen extends StatelessWidget {
             data: orangeTheme,
             child: AlertDialog(
               title: Text("Προγραμματισμός ραντεβού"),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  Text("Επιλέξτε μαγαζί:"),
-                  DropdownButton<String>(
-                    value: selectedShop,
-                    onChanged: (value) {
-                      (context as Element).markNeedsBuild();
-                      selectedShop = value;
-                    },
-                    items: shops.map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
-                  SizedBox(height: 20),
-                  Text("Επιλέξτε ημερομηνία:"),
-                  ListTile(
-                    title: Text(DateFormat('yyyy-MM-dd').format(selectedDate)),
-                    trailing: Icon(Icons.calendar_today),
-                    onTap: () async {
-                      final DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: selectedDate,
-                        firstDate: DateTime.now(),
-                        lastDate: DateTime(2100),
-                      );
-                      if (pickedDate != null) {
+              content: SingleChildScrollView(
+                child: ListBody(
+                  children: <Widget>[
+                    Text("Επιλέξτε μαγαζί:"),
+                    DropdownButton<String>(
+                      value: selectedShop,
+                      onChanged: (value) {
                         (context as Element).markNeedsBuild();
-                        selectedDate = pickedDate;
-                      }
-                    },
-                  ),
-                  SizedBox(height: 10),
-                  Text("Επιλέξτε ώρα:"),
-                  ListTile(
-                    title: Text(selectedTime.format(context)),
-                    trailing: Icon(Icons.access_time),
-                    onTap: () async {
-                      final TimeOfDay? pickedTime = await showTimePicker(
-                        context: context,
-                        initialTime: selectedTime,
-                      );
-                      if (pickedTime != null) {
-                        (context as Element).markNeedsBuild();
-                        selectedTime = pickedTime;
-                      }
-                    },
-                  ),
-                ],
+                        selectedShop = value;
+                      },
+                      items:
+                          shops.map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    SizedBox(height: 20),
+                    Text("Επιλέξτε ημερομηνία:"),
+                    ListTile(
+                      title:
+                          Text(DateFormat('yyyy-MM-dd').format(selectedDate)),
+                      trailing: Icon(Icons.calendar_today),
+                      onTap: () async {
+                        final DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: selectedDate,
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime(2100),
+                        );
+                        if (pickedDate != null) {
+                          (context as Element).markNeedsBuild();
+                          selectedDate = pickedDate;
+                        }
+                      },
+                    ),
+                    SizedBox(height: 10),
+                    Text("Επιλέξτε ώρα:"),
+                    ListTile(
+                      title: Text(selectedTime.format(context)),
+                      trailing: Icon(Icons.access_time),
+                      onTap: () async {
+                        final TimeOfDay? pickedTime = await showTimePicker(
+                          context: context,
+                          initialTime: selectedTime,
+                        );
+                        if (pickedTime != null) {
+                          (context as Element).markNeedsBuild();
+                          selectedTime = pickedTime;
+                        }
+                      },
+                    ),
+                  ],
+                ),
               ),
+              actions: <Widget>[
+                ElevatedButton(
+                  child: Text("Πρόσκληση"),
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the dialog
+                    _showLoadingScreen(context); // Show loading indicator
+                  },
+                ),
+              ],
             ),
-            actions: <Widget>[
-              ElevatedButton(
-                child: Text("Πρόσκληση"),
-                onPressed: () {
-                  Navigator.of(context).pop();  // Close the dialog
-                  _showLoadingScreen(context);  // Show loading indicator
-                },
-              ),
-            ],
-          ));
+          );
         },
       );
     }
