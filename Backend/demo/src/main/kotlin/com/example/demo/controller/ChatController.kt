@@ -19,11 +19,10 @@ class ChatController(private val chatMessageService: ChatMessageService) {
     }
 
     @MessageMapping("/chat.addUser")
-    @SendTo("/topic/public")
-    fun addUser(@Payload chatMessage: ChatMessageDto, headerAccessor: SimpMessageHeaderAccessor): ChatMessageDto {
-        headerAccessor.sessionAttributes?.put("username", chatMessage.sender)
-        chatMessageService.saveMessage(chatMessage)
-        return chatMessage
+    fun addUser(@Payload chatMessage: ChatMessageDto, headerAccessor: SimpMessageHeaderAccessor) {
+        val username = "johndoe" // Hardcoded username for user ID 1
+        headerAccessor.sessionAttributes?.put("username", username)
+        // No need to save the join message or send it to the topic
     }
 
     @MessageMapping("/chat.navigate")
