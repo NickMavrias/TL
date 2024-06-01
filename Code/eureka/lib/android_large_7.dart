@@ -63,7 +63,7 @@ class AndroidLarge7 extends StatelessWidget {
     };
 
     final response = await http.post(
-      Uri.parse('http://192.168.2.3:8080/api/students'),
+      Uri.parse('http://192.168.11.138:8080/api/students'),
       headers: {
         'Content-Type': 'application/json',
       },

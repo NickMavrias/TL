@@ -10,29 +10,31 @@ version: 1.0.0+1
 environment:
   sdk: '>=2.18.0 <3.0.0'
 
-
-
 dependencies:
   flutter:
     sdk: flutter
   intl: ^0.18.0
-  flutter_svg: ^1.1.6  # Check for the latest version on pub.dev
-  http: ^1.2.1
-  image_picker: ^1.1.1
+  flutter_svg: ^1.1.6
+  http: ^0.13.3
+  image_picker: ^0.8.4+11
   swipe_cards: ^2.0.0+1
-
   permission_handler: ^10.2.0
+  web_socket_channel: ^2.1.0
+  stomp_dart_client: ^0.4.4
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0  # Check for the latest version on pub.dev
+  flutter_lints: ^2.0.0
   flutter_launcher_icons: ^0.9.2
-# The following section is specific to Flutter.
+
 flutter:
   # The following line ensures that the Material Icons font is
   # included with your application so that you can use the icons in
   # the Material Icons class.
   uses-material-design: true
+
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/logo_telikoCOLOURED-02.svg
@@ -58,8 +60,7 @@ flutter:
     - assets/images/dislik.png
     - assets/images/tag.png
     - assets/images/QRR.png
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
+
 flutter_icons:
   android: true
   image_path: "assets/icon/app_icon.png"  # Replace with your icon's path

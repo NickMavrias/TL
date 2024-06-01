@@ -60,7 +60,7 @@ class _AndroidLarge8State extends State<AndroidLarge8> {
     try {
       final response = await http.get(
         Uri.parse(
-            'http://192.168.2.3:8080/api/users/check-unique?username=$username&email=$email'),
+            'http://192.168.11.138:8080/api/users/check-unique?username=$username&email=$email'),
       );
 
       if (response.body == "Both username and email are unique") {

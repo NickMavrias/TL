@@ -42,7 +42,7 @@ class _AndroidLarge15State extends State<AndroidLarge15> {
     try {
       final response = await http.get(
         Uri.parse(
-            'http://192.168.1.6:8080/api/appointments/past?firstStudentId=1'),
+            'http://192.168.11.138:8080/api/appointments/past?firstStudentId=1'),
       );
 
       if (response.statusCode == 200) {
@@ -87,7 +87,7 @@ class _AndroidLarge15State extends State<AndroidLarge15> {
     try {
       final response = await http.get(
         Uri.parse(
-            'http://192.168.1.6:8080/api/appointments/pastByCafe?firstStudentId=1'),
+            'http://192.168.11.138:8080/api/appointments/pastByCafe?firstStudentId=1'),
       );
 
       if (response.statusCode == 200) {
@@ -134,7 +134,7 @@ class _AndroidLarge15State extends State<AndroidLarge15> {
       return;
     }
 
-    final url = Uri.parse('http://192.168.1.6:8080/api/evaluateStudents');
+    final url = Uri.parse('http://192.168.11.138:8080/api/evaluateStudents');
     final Map<String, dynamic> payload = {
       'evaluatedPersonId': students[index]
           ['id'], // Provide evaluated person's ID
@@ -173,7 +173,7 @@ class _AndroidLarge15State extends State<AndroidLarge15> {
       return;
     }
 
-    final url = Uri.parse('http://192.168.1.6:8080/api/evaluateCafe');
+    final url = Uri.parse('http://192.168.11.138:8080/api/evaluateCafe');
     final Map<String, dynamic> payload = {
       'evaluatedCafeId': cafes[index]['id'], // Provide evaluated cafe's ID
       'silence': _ratingsCafes[index][0],
