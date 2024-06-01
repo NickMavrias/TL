@@ -1,5 +1,5 @@
  # Eureka.
-![sample](Phases/Phase 4/asset.png)
+![background](Phases/Phase 4/asset.png)
 
 We are a generation characterized by procrastination.
 One solution and solution to this, commonly used by students and not only, are the study cafes.
